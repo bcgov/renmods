@@ -10,7 +10,7 @@ output:
 
 # renmods
 
-An R package to download, import, and filter data from [B.C.’s Environmental Monitoring Data System](https://www2.gov.bc.ca/gov/content/environment/research-monitoring-reporting/monitoring/environmental-monitoring-data-system) (EnMoDs) into R.
+An R package to download, import, and filter data from [B.C.’s Environmental Monitoring Data System](https://www2.gov.bc.ca/gov/content/environment/research-monitoring-reporting/monitoring/environmental-monitoring-data-system) (EnMoDs) into R. 'renmods' package replaces 'rems' to support the new data system released in March 2026. 
 
 The EnMoDs dataset is licensed under the [Open Government Licence - British Columbia](http://www2.gov.bc.ca/gov/content?id=A519A56BC2BF44E4A008B33FCF527F61).
 
@@ -19,7 +19,10 @@ The EnMoDs dataset is licensed under the [Open Government Licence - British Colu
 ### Installation
 
 ```{r install}
-## basic example code
+# install.packages("devtools") # if not already installed
+
+library(devtools)
+install_github("bcgov/renmods")
 ```
 
 ### Usage
