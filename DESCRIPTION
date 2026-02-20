@@ -8,11 +8,13 @@ Authors@R: c(
 Description: What the package does (one paragraph).
 License: Apache License (== 2.0) | file LICENSE
 Encoding: UTF-8
+URL: https://github.com/bcgov/renmods
+BugReports: https://github.com/bcgov/renmods/issues
+Depends:
+  cli  
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://github.com/bcgov/renmods
-BugReports: https://github.com/bcgov/renmods/issues
