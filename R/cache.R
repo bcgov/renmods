@@ -49,7 +49,7 @@ cache_meta <- function(type = NULL, update = NULL) {
   } else {
     meta <- data.frame(
       type = renmods()$types,
-      last_downloaded = as.POSIXct(NA, tz = Sys.timezone()),
+      last_downloaded = NA_character,
       date_range = NA_character_,
       renmods_version = NA_character_
     )
@@ -64,7 +64,7 @@ cache_meta <- function(type = NULL, update = NULL) {
       meta,
       data.frame(
         type = update,
-        last_downloaded = Sys.time(),
+        last_downloaded = as.character(round(Sys.time())),
         date_range = dates,
         renmods_version = as.character(packageVersion("renmods"))
       ),
