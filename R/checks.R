@@ -58,3 +58,25 @@ check_time_to_update <- function(type) {
   }
   update
 }
+
+check_db_httpsfs <- function(con) {
+  con <- tryCatch(DBI::dbExecute(con, "LOAD httpfs"), error = \(e) {
+    if (stringr::str_detect(e$message, "INSTALL httpfs")) {
+      install <- ask(
+        "'httpfs', a DuckDB extension required to read ENMODS data, is not is not available, install?",
+        "Installing DuckDB extension 'httpfs'"
+      )
+      if (install) {
+        DBI::dbExecute(con, "INSTALL httpfs")
+        return(con)
+      } else {
+        cli_abort(
+          "Cannot work with ENMODS data without the `httpfs` extension",
+          call = NULL
+        )
+      }
+    } else {
+      e
+    }
+  })
+}
