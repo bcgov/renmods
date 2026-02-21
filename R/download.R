@@ -24,25 +24,29 @@
 #' renmods_update("all")
 
 renmods_update <- function(type = "current", force = FALSE) {
-  check_type(type)
-
-  # Repeat for all if requested
+  # Repeat for "all" if requested
   if (type == "all") {
-    purrr::walk(renmods_types(), \(t) renmods_update(t, force = force))
+    purrr::walk(renmods()$types, \(t) renmods_update(t, force = force))
     return(invisible())
   }
+
+  check_type(type)
+
   path <- cache_path(type)
   url <- getOption("renmods.urls")[[type]]
 
   cli_par()
   cli_alert("Downloading '{type}' data from ENMODS")
 
-  if (check_cache(path, force)) {
+  if (check_cache(type, force)) {
     cli_alert_info("Saving to cache: {path}")
 
     httr2::request(url) |>
       httr2::req_progress() |>
       httr2::req_perform(path = path)
+
+    # Record metadata
+    cache_meta(update = type)
 
     cli_alert_success("Data '{type}' successfully downloaded")
   } else {
