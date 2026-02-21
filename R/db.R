@@ -43,8 +43,14 @@ renmods_connect <- function(date_range = NULL, types = "all") {
     "'], compression = 'gzip', union_by_name = true, filename = true)"
   )
 
-  db_connect() |>
-    duckdb::tbl_function(sql)
+  tbl <- db_connect() |>
+    duckdb::tbl_function(sql) |>
+    dplyr::filter(
+      # !! required because otherwise indexing [1] creates problems with the SQL commands
+      # !! means evaluate right away and pass the output on
+      .data$Observed_Date_Time >= !!date_range[1],
+      .data$Observed_Date_Time <= !!date_range[2]
+    )
 }
 
 db_connect <- function() {
