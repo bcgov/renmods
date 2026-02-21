@@ -20,14 +20,10 @@ cache_dir <- function() {
     normalizePath(mustWork = FALSE)
 
   if (!dir.exists(path)) {
-    if (interactive()) {
-      cli_alert_warning("Cache directory does not exist.")
-      cli_ul("Create {path}?")
-      go <- utils::askYesNo(msg = "", default = TRUE)
-      if (isTRUE(go)) create <- TRUE else create <- FALSE
-    } else {
-      create <- TRUE
-    }
+    create <- ask(
+      "Cache directory does not exist. Create {path}?",
+      "Creating cache directory {path}"
+    )
     if (create) {
       created <- dir.create(path)
       if (created) cli_alert_success("Successfully created cache directory")
@@ -43,6 +39,44 @@ cache_path <- function(type) {
   check_type(type)
   path <- file.path(cache_dir(), paste0(type, ".csv.gz"))
   path
+}
+
+cache_meta <- function(type = NULL, update = NULL) {
+  path <- file.path(cache_dir(), "metadata.csv")
+
+  if (file.exists(path)) {
+    meta <- read.csv(path)
+  } else {
+    meta <- data.frame(
+      type = renmods()$types,
+      last_downloaded = as.POSIXct(NA, tz = Sys.timezone()),
+      date_range = NA_character_,
+      renmods_version = NA_character_
+    )
+  }
+  if (!is.null(update)) {
+    dates <- update |>
+      cache_path() |>
+      extract_date_range() |>
+      dt_to_char()
+
+    meta <- dplyr::rows_upsert(
+      meta,
+      data.frame(
+        type = update,
+        last_downloaded = Sys.time(),
+        date_range = dates,
+        renmods_version = as.character(packageVersion("renmods"))
+      ),
+      by = "type"
+    )
+  }
+  write.csv(meta, path, row.names = FALSE)
+
+  if (!is.null(type)) {
+    meta <- dplyr::filter(meta, .data$type == .env$type)
+  }
+  invisible(meta)
 }
 
 cache_status <- function() {
