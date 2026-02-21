@@ -13,8 +13,8 @@
 # the License.
 
 check_type <- function(type) {
-  t <- c("all", renmods_types())
-  if (!type %in% t) {
+  t <- renmods()$types
+  if (!all(type %in% t)) {
     rlang::abort(
       paste0(
         "Type must be one of '",

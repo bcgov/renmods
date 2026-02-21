@@ -28,6 +28,11 @@
   options(opts[!names(opts) %in% names(options())])
 }
 
-renmods_types <- function() {
-  c("current", "yr_2_5", "yr_5_10", "historic")
+renmods <- function() {
+  types <- c("this_yr", "yr_2_5", "yr_5_10", "historic")
+
+  update <- c(1, 26, 26, 26) |> # Weeks!
+    stats::setNames(types)
+
+  list(types = types, update = update)
 }
