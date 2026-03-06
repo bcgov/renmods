@@ -1,0 +1,110 @@
+# renmods
+
+An R package to download, import, and filter data from [B.C.’s
+Environmental Monitoring Data
+System](https://www2.gov.bc.ca/gov/content/environment/research-monitoring-reporting/monitoring/environmental-monitoring-data-system)
+(EnMoDs) into R. ‘renmods’ package replaces ‘rems’ to support the new
+data system released in March 2026.
+
+The EnMoDs dataset is licensed under the [Open Government Licence -
+British
+Columbia](https://www2.gov.bc.ca/gov/content?id=A519A56BC2BF44E4A008B33FCF527F61).
+
+### Features
+
+- Download ENMODS data and cache locally
+- Simple connections to the ENMODS database, only to as much data as
+  required to speed up load times.
+
+### Installation
+
+``` r
+# install.packages("pak") # if not already installed
+
+library(pak)
+pkg_install("bcgov/renmods")
+```
+
+### Usage
+
+See the [Get
+Started](https://steffilazerte.github.io/renmods/articles/renmods.html)
+tutorial for details
+
+### Project Status
+
+Very first stages of development.
+
+### Getting Help or Reporting an Issue
+
+To report bugs/issues/feature requests, please file an
+[issue](https://github.com/bcgov/renmods/issues/).
+
+### How to Contribute
+
+If you would like to contribute to the package, please see our
+[CONTRIBUTING](http://steffilazerte.ca/renmods/CONTRIBUTING.md)
+guidelines.
+
+Please note that this project is released with a [Contributor Code of
+Conduct](http://steffilazerte.ca/renmods/CODE_OF_CONDUCT.md). By
+participating in this project you agree to abide by its terms.
+
+## Code Coverage
+
+``` R
+#> renmods Coverage: 85.91%
+#> R/checks.R: 72.46%
+#> R/db.R: 87.04%
+#> R/cache.R: 89.19%
+#> R/utils.R: 89.19%
+#> R/download.R: 100.00%
+#> R/test-utils.R: 100.00%
+#> R/zzz.R: 100.00%
+```
+
+### License
+
+``` R
+Copyright 2026 Province of British Columbia
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+```
+
+------------------------------------------------------------------------
+
+*This project was created using the
+[bcgovr](https://github.com/bcgov/bcgovr) package.*
+
+# Package index
+
+## All functions
+
+- [`cache_dir()`](http://steffilazerte.ca/renmods/reference/cache_dir.md)
+  : Get or create cache directory
+- [`cache_remove()`](http://steffilazerte.ca/renmods/reference/cache_remove.md)
+  : Remove cached data
+- [`cache_status()`](http://steffilazerte.ca/renmods/reference/cache_status.md)
+  : View cache status
+- [`collect`](http://steffilazerte.ca/renmods/reference/collect.md) :
+  Force computation of a database query
+- [`renmods_connect()`](http://steffilazerte.ca/renmods/reference/renmods_connect.md)
+  : Connect to ENMODS data via DuckDB
+- [`renmods_disconnect()`](http://steffilazerte.ca/renmods/reference/renmods_disconnect.md)
+  : Disconnect from the database
+- [`renmods_update()`](http://steffilazerte.ca/renmods/reference/renmods_update.md)
+  : Update cached ENMODS data
+
+# Articles
+
+### All vignettes
+
+- [renmods](http://steffilazerte.ca/renmods/articles/renmods.md):
