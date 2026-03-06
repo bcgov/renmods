@@ -43,11 +43,11 @@ To report bugs/issues/feature requests, please file an
 ### How to Contribute
 
 If you would like to contribute to the package, please see our
-[CONTRIBUTING](http://steffilazerte.ca/renmods/CONTRIBUTING.md)
+[CONTRIBUTING](https://bcgov.github.io/renmods/CONTRIBUTING.md)
 guidelines.
 
 Please note that this project is released with a [Contributor Code of
-Conduct](http://steffilazerte.ca/renmods/CODE_OF_CONDUCT.md). By
+Conduct](https://bcgov.github.io/renmods/CODE_OF_CONDUCT.md). By
 participating in this project you agree to abide by its terms.
 
 ## Code Coverage

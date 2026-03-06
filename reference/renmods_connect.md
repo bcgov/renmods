@@ -2,13 +2,13 @@
 
 Creates a DuckDB connection to cached ENMODS data. The database table
 can be filtered using dplyr before collecting into a data frame with
-[`collect()`](http://steffilazerte.ca/renmods/reference/collect.md).
+[`collect()`](https://bcgov.github.io/renmods/reference/collect.md).
 Using `dates` (date range) or `types` (data types) prefilters the data
 to a specific date range or specific data file. But if both are
 supplied, `dates` takes precedence. Only the data files required will be
 connected to and the fewer data sources connected to and the smaller the
 dataset, the quicker the
-[`collect()`](http://steffilazerte.ca/renmods/reference/collect.md)
+[`collect()`](https://bcgov.github.io/renmods/reference/collect.md)
 function will run.
 
 ## Usage
@@ -35,7 +35,7 @@ renmods_connect(dates = NULL, types = "all")
 
 A `tbl_duckdb_connection` object - a lazy DuckDB table. Use dplyr
 functions to filter/select, then
-[`collect()`](http://steffilazerte.ca/renmods/reference/collect.md) to
+[`collect()`](https://bcgov.github.io/renmods/reference/collect.md) to
 load into R memory.
 
 ## Examples

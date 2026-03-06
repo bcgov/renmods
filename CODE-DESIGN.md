@@ -24,7 +24,7 @@
   date of download and the date range of the files sufficient to track
   this?
 - Right now the actual
-  [`renmods_connect()`](http://steffilazerte.ca/renmods/reference/renmods_connect.md)
+  [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md)
   tests are skipped if there is no locally downloaded data in the cache,
   but we could consider mocking a db for this (see
   <https://docs.ropensci.org/dittodb/>)
@@ -49,13 +49,13 @@
 
 The workflow is hopefully very simple:
 
-- [`renmods_update()`](http://steffilazerte.ca/renmods/reference/renmods_update.md) -
+- [`renmods_update()`](https://bcgov.github.io/renmods/reference/renmods_update.md) -
   Download and cache data locally
-- [`renmods_connect()`](http://steffilazerte.ca/renmods/reference/renmods_connect.md) -
+- [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md) -
   Connect to \*.csv.gz files
-- [`collect()`](http://steffilazerte.ca/renmods/reference/collect.md) -
+- [`collect()`](https://bcgov.github.io/renmods/reference/collect.md) -
   Retrieve data to R data.frame/tibble (reexported from dplyr)
-- [`renmods_disconnect()`](http://steffilazerte.ca/renmods/reference/renmods_disconnect.md) -
+- [`renmods_disconnect()`](https://bcgov.github.io/renmods/reference/renmods_disconnect.md) -
   Disconnect from the data base
 
 There are also a family of `cache_xxx()` functions for controlling the
@@ -72,7 +72,7 @@ cache.
 
 ## Internal data via functions (`zzz.R`)
 
-- [`renmods()`](http://steffilazerte.ca/renmods/reference/renmods-package.md)
+- [`renmods()`](https://bcgov.github.io/renmods/reference/renmods-package.md)
   is an internal function (in `zzz.R`) that lists
   - Data types available (‘this_yr’, ‘yr_2_5’, ‘yr_5_10’, ‘historic’)
   - Update intervals (in weeks) for each type
@@ -82,16 +82,16 @@ cache.
 
 - Cache functions are in `cache.R`
 - Users can see
-  - [`cache_dir()`](http://steffilazerte.ca/renmods/reference/cache_dir.md)
+  - [`cache_dir()`](https://bcgov.github.io/renmods/reference/cache_dir.md)
     (checks and creates directory)
-  - [`cache_status()`](http://steffilazerte.ca/renmods/reference/cache_status.md)
+  - [`cache_status()`](https://bcgov.github.io/renmods/reference/cache_status.md)
     (returns data frame of cached files, download dates, date ranges,
     and file paths)
-  - [`cache_remove()`](http://steffilazerte.ca/renmods/reference/cache_remove.md)
+  - [`cache_remove()`](https://bcgov.github.io/renmods/reference/cache_remove.md)
     (remove parts or whole of cache)
 - `cache_path()` and `cache_meta()` are internal
   - `cache_meta()` is very similar to
-    [`cache_status()`](http://steffilazerte.ca/renmods/reference/cache_status.md)
+    [`cache_status()`](https://bcgov.github.io/renmods/reference/cache_status.md)
     but is also used to update/reset the cache metadata.
   - `cache_meta()` uses `extract_date_range()` to pull the original file
     name from the downloaded `*.csv.gz`. Currently that is a date range
@@ -108,17 +108,17 @@ cache.
   `renmods()$update`)
 - Use `renmods_update_()` as an internal function so we can download out
   of date/missing data when the
-  [`renmods_connect()`](http://steffilazerte.ca/renmods/reference/renmods_connect.md)
+  [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md)
   function is used without all the chatter.
 
 ## Database (`db.R`)
 
-- [`renmods_connect()`](http://steffilazerte.ca/renmods/reference/renmods_connect.md)
+- [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md)
   combines and connects to all data by default
 - Users can supply a date range or the data type they wish to connect to
 - For a date range, we check the metadata and pick only the data types
   needed, then we prefilter the data by date.
-- [`collect()`](http://steffilazerte.ca/renmods/reference/collect.md) is
+- [`collect()`](https://bcgov.github.io/renmods/reference/collect.md) is
   exported from dplyr (`re-exports.R`) so that users don’t have to use
   dplyr just to get the data.
 

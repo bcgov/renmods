@@ -2,4 +2,4 @@
 
 ### All vignettes
 
-- [renmods](http://steffilazerte.ca/renmods/articles/renmods.md):
+- [renmods](https://bcgov.github.io/renmods/articles/renmods.md):

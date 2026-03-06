@@ -43,11 +43,11 @@ To report bugs/issues/feature requests, please file an
 ### How to Contribute
 
 If you would like to contribute to the package, please see our
-[CONTRIBUTING](http://steffilazerte.ca/renmods/CONTRIBUTING.md)
+[CONTRIBUTING](https://bcgov.github.io/renmods/CONTRIBUTING.md)
 guidelines.
 
 Please note that this project is released with a [Contributor Code of
-Conduct](http://steffilazerte.ca/renmods/CODE_OF_CONDUCT.md). By
+Conduct](https://bcgov.github.io/renmods/CODE_OF_CONDUCT.md). By
 participating in this project you agree to abide by its terms.
 
 ## Code Coverage
@@ -88,23 +88,23 @@ See the License for the specific language governing permissions and limitations 
 
 ## All functions
 
-- [`cache_dir()`](http://steffilazerte.ca/renmods/reference/cache_dir.md)
+- [`cache_dir()`](https://bcgov.github.io/renmods/reference/cache_dir.md)
   : Get or create cache directory
-- [`cache_remove()`](http://steffilazerte.ca/renmods/reference/cache_remove.md)
+- [`cache_remove()`](https://bcgov.github.io/renmods/reference/cache_remove.md)
   : Remove cached data
-- [`cache_status()`](http://steffilazerte.ca/renmods/reference/cache_status.md)
+- [`cache_status()`](https://bcgov.github.io/renmods/reference/cache_status.md)
   : View cache status
-- [`collect`](http://steffilazerte.ca/renmods/reference/collect.md) :
+- [`collect`](https://bcgov.github.io/renmods/reference/collect.md) :
   Force computation of a database query
-- [`renmods_connect()`](http://steffilazerte.ca/renmods/reference/renmods_connect.md)
+- [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md)
   : Connect to ENMODS data via DuckDB
-- [`renmods_disconnect()`](http://steffilazerte.ca/renmods/reference/renmods_disconnect.md)
+- [`renmods_disconnect()`](https://bcgov.github.io/renmods/reference/renmods_disconnect.md)
   : Disconnect from the database
-- [`renmods_update()`](http://steffilazerte.ca/renmods/reference/renmods_update.md)
+- [`renmods_update()`](https://bcgov.github.io/renmods/reference/renmods_update.md)
   : Update cached ENMODS data
 
 # Articles
 
 ### All vignettes
 
-- [renmods](http://steffilazerte.ca/renmods/articles/renmods.md):
+- [renmods](https://bcgov.github.io/renmods/articles/renmods.md):

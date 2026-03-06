@@ -13,7 +13,7 @@ renmods_disconnect(tbl)
 - tbl:
 
   DuckDB tbl created with
-  [`renmods_connect()`](http://steffilazerte.ca/renmods/reference/renmods_connect.md)
+  [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md)
 
 ## Value
 
