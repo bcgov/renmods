@@ -1,6 +1,6 @@
 Package: renmods
 Title: Downloads and queries data from B.C. Environmental Monitoring Data System (EnMoDs)
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person("Steffi", "LaZerte", email = "sel@steffilazerte.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-7690-8360")),
     person("Province of British Columbia", role = "cph")
@@ -26,9 +26,10 @@ Imports:
     stringr (>= 1.6.0)
 Suggests: 
     knitr,
+    lubridate (>= 1.9.4),
     rmarkdown,
     testthat (>= 3.0.0),
     withr (>= 3.0.2)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
-Config/Needs/website: rmarkdown
+Config/Needs/website: rmarkdown, DT

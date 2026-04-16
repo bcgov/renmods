@@ -14,8 +14,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+## Connecting to the database
 ```{r setup}
 library(renmods)
+library(lubridate)
 ```
 
 
@@ -40,6 +43,9 @@ db <- renmods_connect(type = "this_yr")
 db <- renmods_connect(dates = c("2024-12-15", "2025-01-15"))
 db <- renmods_connect(dates = c("2026-01-01", "2026-01-31"))
 ```
+
+
+## Collecting data into memory
 
 Collect the data into a data frame (from a database connection) for working/saving.
 The smaller the data set and the fewer data types, the fast this will go.
@@ -82,6 +88,8 @@ df <- db |>
   select(
     "Location_ID",
     "Location_Name",
+    "ren_date",
+    "ren_tz",
     "Observed_Date_Time",
     "Observed_Property_Name",
     "Result_Value",
@@ -92,6 +100,83 @@ df <- db |>
 
 df
 ```
+
+## Dates and Times
+
+ENMODS stores date/times as character/text fields with the timezone indicated by +/- offset (e.g., '-08:00'). However, in R all values in a column must use the same timezone. Therefore renmods converts times to UTC-7:00
+(called `Etc/GMT+7`, note that `+` is correct; see the [Wikipedia page on
+timezones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)).
+
+This may not be always ideal depending on the region you're working in, so 
+the original timezone from `Observed_Date_Time` is stored in a new field `ren_tz`
+for reference. You can convert to any timezone using the [lubridate::with_tz()](https://lubridate.tidyverse.org/reference/with_tz.html) function.
+
+We can see that we're in UTC -7 by looking at the first couple of values.
+```{r}
+df$Observed_Date_Time[1:5]
+```
+
+If we want to be in UTC -6:00 we can convert with lubridate's `with_tz()` function.
+
+```{r}
+with_tz(df$Observed_Date_Time[1:5], tz = "Etc/GMT+6")
+```
+
+This only converts the first 5 observations, just for illustration.
+
+If we want to convert the entire data frame to Mountain time (including DST depending on the time of year),
+we could use the `America/Edmonton` timezone.
+
+```{r}
+df_tz <- mutate(
+  df,
+  Observed_Date_Time = with_tz(Observed_Date_Time, "America/Edmonton")
+)
+# Take a look:
+df_tz$Observed_Date_Time[1:5]
+```
+
+If you wanted to convert all time columns at once, you could use the `across()`
+function from dplyr.
+
+First we'll get the whole data set again
+```{r}
+df <- renmods_connect(dates = c("2024-12-15", "2025-01-15")) |>
+  collect()
+```
+
+What time columns do we have?
+```{r}
+select(df, contains("Time"))
+```
+
+We can use the tidyselector `contains()` with across to apply a function *across* a series of columns.
+```{r}
+df_tz <- mutate(
+  df,
+  across(contains("Time"), \(col) with_tz(col, "America/Edmonton"))
+)
+
+# Take a look:
+df_tz$Observed_Date_Time[1:5]
+df_tz$Field_Visit_Start_Time[1:5]
+```
+
+Finally, you can also prevent any date/time conversion and leave those fields
+as character.
+
+```{r}
+df <- renmods_connect(
+  dates = c("2024-12-15", "2025-01-15"),
+  convert_times = FALSE
+) |>
+  collect()
+
+# Note columns are character now
+select(df, contains("Time"))
+```
+
+## Disconnecting
 
 Don't forget to close the connection to the database
 

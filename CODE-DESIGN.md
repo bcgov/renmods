@@ -26,6 +26,16 @@
     - use `local_mocked_bindings()` to mock
     - Includes several tests which can only be run locally, use `skip_if_no_cache()`
 
+## Gotchas
+- When using expressions/variables in dplyr/dbplyr functions manipulating a database, 
+  must use the bang-bang (`!!`) to unquote the expression and ensure it is
+  evaluated before being passed on.
+- Users are forced to update their data if it was downloaded with an older 
+  version of the package. This is to ensure that if the data changes, and the
+  package changes to match, that users don't get funny errors if they try to 
+  use older versions of the data with a newer version of the package. If
+  ENMODS has a data versioning system, we could use that instead.
+
 ## Workflow
 The workflow is hopefully very simple: 
 
@@ -75,6 +85,11 @@ There are also a family of `cache_xxx()` functions for controlling the cache.
   then we prefilter the data by date.
 - `collect()` is exported from dplyr (`re-exports.R`) so that users don't have
   to use dplyr just to get the data.
+
+## Database Utility functions (`db_utils.R`)
+- `db_xx()` and `sql_xx()` functions to make modifications to the database,
+  namely times and dates
+- `sql_xx()` merely create the SQL expressions required
 
 ## Other
 - Standard checks are in `checks.R`

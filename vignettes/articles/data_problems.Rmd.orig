@@ -1,0 +1,138 @@
+---
+title: "renmods"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{renmods}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Setup
+```{r setup}
+library(renmods)
+library(lubridate)
+```
+
+
+Download/update the data
+
+```{r}
+renmods_update(type = "all") # Consider force = TRUE
+```
+
+
+## Timezones woes
+```{r}
+db <- renmods_connect(convert_times = FALSE) # So we can grab the timezones
+```
+
+Get timezones of all columns
+```{r}
+time_cols <- stringr::str_subset(colnames(db), "Time")
+dplyr::select(db, dplyr::all_of(time_cols))
+
+for (t in time_cols) {
+  tt <- paste0("tz_", t)
+  db <- dplyr::mutate(db, !!tt := !!renmods:::sql_get_tz(t))
+}
+tz_cols <- paste0("tz_", time_cols)
+
+t <- list()
+for (tz in seq_along(tz_cols[-1])) {
+  comp <- paste(
+    time_cols[tz],
+    "vs",
+    time_cols[tz + 1]
+  )
+  cli_inform(paste("Comparing timezones for", comp))
+  t0 <- db |>
+    dplyr::filter(.data[[tz_cols[tz]]] != .data[[tz_cols[tz + 1]]]) |>
+    dplyr::collect()
+  t <- append(t, setNames(list(t0), comp))
+}
+```
+
+
+### List all observations with timezone mismatches
+
+Where there is more than one timezone in a row
+
+```{r}
+tt <- t |>
+  purrr::list_rbind() |>
+  dplyr::distinct() |>
+  dplyr::select("Location_ID", "Observed_Date_Time", contains("Time"))
+```
+
+
+```{r}
+# For precompilation
+saveRDS(tt, "precomp_tz1.rds")
+```
+
+
+```{r precomp1}
+#| eval = FALSE
+# precomp step 2
+tt <- readRDS("precomp_tz1.rds")
+DT::datatable(
+  tt,
+  rownames = FALSE,
+  extensions = "Buttons",
+  options = list(
+    dom = "Bfrtip",
+    buttons = list(
+      I("colvis"),
+      list(extend = "csv", title = paste0("enmods_tz_", Sys.Date())),
+      list(extend = "excel", title = paste0("enmods_tz_", Sys.Date()))
+    )
+  )
+)
+```
+
+
+### List all observations with unexpected timezones
+
+Any timezone except -6, -7, -8
+
+```{r}
+tt <- db |>
+  dplyr::filter(dplyr::if_any(dplyr::contains("tz"), \(x) {
+    !x %in% c("-08:00", "-07:00", "-06:00")
+  })) |>
+  dplyr::select("Location_ID", "Observed_Date_Time", contains("Time")) |>
+  collect()
+```
+
+```{r}
+# For precompilation
+saveRDS(tt, "precomp_tz2.rds")
+```
+
+
+```{r}
+#| eval = FALSE
+# precomp step 2
+tt <- readRDS("precomp_tz2.rds")
+DT::datatable(
+  tt,
+  rownames = FALSE,
+  extensions = "Buttons",
+  options = list(
+    dom = "Bfrtip",
+    buttons = list(
+      I("colvis"),
+      list(extend = "csv", title = paste0("enmods_tz_", Sys.Date())),
+      list(extend = "excel", title = paste0("enmods_tz_", Sys.Date()))
+    )
+  )
+)
+```

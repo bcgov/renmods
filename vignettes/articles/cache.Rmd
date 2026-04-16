@@ -1,0 +1,43 @@
+---
+title: "Working with the cache"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with the cache}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+``` r
+library(renmods)
+```
+
+Where is my cache?
+
+
+``` r
+cache_dir()
+#> [1] "/home/steffi/.local/share/R/renmods"
+```
+
+What's the status of my cache?
+
+
+``` r
+cache_status()
+#> # A tibble: 4 × 5
+#>   type     last_downloaded     date_range               renmods_version path                            
+#>   <chr>    <chr>               <chr>                    <chr>           <chr>                           
+#> 1 this_yr  2026-04-14 11:26:37 2025-01-01 to 2026-04-11 0.0.2           /home/steffi/.local/share/R/ren…
+#> 2 yr_2_5   2026-04-14 11:27:35 2022-01-01 to 2024-12-31 0.0.2           /home/steffi/.local/share/R/ren…
+#> 3 yr_5_10  2026-04-14 11:28:33 2017-01-01 to 2021-12-31 0.0.2           /home/steffi/.local/share/R/ren…
+#> 4 historic 2026-04-14 11:32:12 2016-12-31               0.0.2           /home/steffi/.local/share/R/ren…
+```
+
+Remove my cache
+
+``` r
+cache_remove()
+```

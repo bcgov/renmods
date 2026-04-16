@@ -12,6 +12,7 @@ What the package does (one paragraph).
 Useful links:
 \itemize{
   \item \url{https://github.com/bcgov/renmods}
+  \item \url{https://bcgov.github.io/renmods/}
   \item Report bugs at \url{https://github.com/bcgov/renmods/issues}
 }
 

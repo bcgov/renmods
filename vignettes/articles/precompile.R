@@ -5,7 +5,8 @@
 devtools::load_all()
 
 # Files to precompile
-vignettes <- c("renmods")
+vignettes <- list.files("vignettes/articles", "orig") |>
+  stringr::str_remove_all("\\.Rmd\\.orig")
 
 # NOTE: This precompiles but does not fix figure locations, if figures are included
 # in future, will need to do that.
@@ -21,4 +22,11 @@ for (v in vignettes) {
     output = output_file,
     envir = new.env()
   )
+
+  r <- readLines(output_file)
+  r1 <- stringr::str_which(r, "precomp step 2") # Mark as runnable
+  if (length(r1)) {
+    r[r1 - 1] <- "```{r}"
+    writeLines(r, output_file)
+  }
 }

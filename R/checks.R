@@ -111,6 +111,11 @@ check_cache <- function(type, force = FALSE) {
   } else if (force) {
     update <- TRUE
     cli_alert_info("Forcing update of cached data")
+  } else if (!check_version(type)) {
+    cli_alert_info(
+      "Cached data is from an older version of the package and should be updated"
+    )
+    update <- TRUE
   } else {
     update <- check_time_to_update(type)
   }
@@ -178,7 +183,7 @@ check_db_httpsfs <- function(con) {
         return(con)
       } else {
         cli_abort(
-          "Cannot work with ENMODS data without the `httpfs` extension",
+          "Cannot work with ENMODS data without the 'httpfs' extension",
           call = NULL
         )
       }
@@ -186,4 +191,56 @@ check_db_httpsfs <- function(con) {
       e
     }
   })
+}
+
+#' Check and install DuckDB icu extension
+#'
+#' Verifies that the icu extension is available in DuckDB and prompts
+#' to install it if missing. This extension is required to handle timezones in
+#' date/times.
+#'
+#' @param con DuckDB connection object.
+#'
+#' @returns DuckDB connection object (invisibly).
+#'
+#' @noRd
+#' @examples
+#' con <- DBI::dbConnect(duckdb::duckdb())
+#' check_db_icu(con)
+
+check_db_icu <- function(con) {
+  con <- tryCatch(DBI::dbExecute(con, "LOAD icu"), error = \(e) {
+    if (stringr::str_detect(e$message, "INSTALL icu")) {
+      install <- ask(
+        "'icu', a DuckDB extension required to handle date/times in ENMODS data, is not is not available, install?",
+        "Installing DuckDB extension 'icu'"
+      )
+      if (install) {
+        DBI::dbExecute(con, "INSTALL icu")
+        return(con)
+      } else {
+        cli_abort(
+          "Cannot work with ENMODS data without the 'icu' extension",
+          call = NULL
+        )
+      }
+    } else {
+      e
+    }
+  })
+}
+
+#' Check data version against package version
+#'
+#' @param type Character. Single data type to check.
+#'
+#' @returns TRUE if matches, FALSE if data older than package
+#'
+#' @noRd
+#' @examples
+#' check_version("this_yr")
+
+check_version <- function(type) {
+  v <- cache_meta(types = type)$renmods_version
+  v >= packageVersion("renmods")
 }

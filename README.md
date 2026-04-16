@@ -6,7 +6,7 @@
 [![img](https://img.shields.io/badge/Lifecycle-Experimental-339999)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
 [![R-CMD-check](https://github.com/steffilazerte/renmods/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/steffilazerte/renmods/actions/workflows/R-CMD-check.yaml)
 [![Code Coverage:
-79%](https://img.shields.io/badge/code_coverage-79%25-green)](#code-coverage)
+83%](https://img.shields.io/badge/code_coverage-83%25-green)](#code-coverage)
 <!-- badges: end -->
 
 # renmods
@@ -62,11 +62,12 @@ to abide by its terms.
 
 ## Code Coverage
 
-    #> renmods Coverage: 78.52%
-    #> R/cache.R: 59.46%
-    #> R/checks.R: 72.46%
-    #> R/db.R: 87.04%
+    #> renmods Coverage: 83.09%
+    #> R/checks.R: 62.11%
+    #> R/db.R: 88.33%
+    #> R/cache.R: 89.19%
     #> R/utils.R: 89.19%
+    #> R/db_utils.R: 100.00%
     #> R/download.R: 100.00%
     #> R/test-utils.R: 100.00%
     #> R/zzz.R: 100.00%

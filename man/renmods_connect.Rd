@@ -4,7 +4,7 @@
 \alias{renmods_connect}
 \title{Connect to ENMODS data via DuckDB}
 \usage{
-renmods_connect(dates = NULL, types = "all")
+renmods_connect(dates = NULL, types = "all", convert_times = TRUE)
 }
 \arguments{
 \item{dates}{Character or Date vector of length 2. Start and end dates for
@@ -14,6 +14,10 @@ filtering data ("YYYY-MM-DD"). Note that data is filtered by the
 \item{types}{Character. Data types to connect to. One or more of
 "this_yr", "yr_2_5", "yr_5_10", "historic", or "all" (default "all").
 Ignored if \code{dates} is specified.}
+
+\item{convert_times}{Logical. Whether or not to convert character date/times
+to date/time format in R. Defaults to \code{TRUE}. If \code{FALSE} remain as
+character.}
 }
 \value{
 A \code{tbl_duckdb_connection} object - a lazy DuckDB table. Use dplyr
@@ -28,6 +32,15 @@ takes precedence. Only the data files required will be connected to and the
 fewer data sources connected to and the smaller the dataset, the quicker the
 \code{collect()} function will run.
 }
+\details{
+Note that ENMODS stores date/times as character/text fields with the timezone
+indicated by +/- offset (e.g., '-08:00'). However, in R all values in a
+column must use the same timezone. Therefore times are converted to UTC-7:00
+(called \code{Etc/GMT+7}, note that \code{+} is correct; see the \href{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List}{Wikipedia page on timezones}).
+The original timezone from \code{Observed_Date_Time} is stored in a new field
+\code{ren_tz} for reference. You can convert to any timezone using the
+\code{\link[lubridate:with_tz]{lubridate::with_tz()}} function.
+}
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # All data
@@ -38,6 +51,7 @@ db <- renmods_connect(types = "this_yr")
 
 # Connect only to data types required for a specific date range
 db <- renmods_connect(dates = c("2025-01-01", "2025-02-01"))
+db <- renmods_connect(dates = c("1990-01-01", "1990-02-01"))
 
 # Use dplyr to manipulate the data
 library(dplyr)

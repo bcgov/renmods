@@ -1,0 +1,177 @@
+---
+title: "renmods"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{renmods}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+## Setup
+
+``` r
+library(renmods)
+library(lubridate)
+```
+
+
+Download/update the data
+
+
+``` r
+renmods_update(type = "all") # Consider force = TRUE
+#> ✔ this_yr: Last downloaded 2026-04-14 11:26:37 (within 1 week(s))
+#> ✔ Data 'this_yr' already present and up-to-date (use `force = TRUE` to update anyway)
+#> ✔ yr_2_5: Last downloaded 2026-04-14 11:27:35 (within 26 week(s))
+#> ✔ Data 'yr_2_5' already present and up-to-date (use `force = TRUE` to update anyway)
+#> ✔ yr_5_10: Last downloaded 2026-04-14 11:28:33 (within 26 week(s))
+#> ✔ Data 'yr_5_10' already present and up-to-date (use `force = TRUE` to update anyway)
+#> ✔ historic: Last downloaded 2026-04-14 11:32:12 (within 26 week(s))
+#> ✔ Data 'historic' already present and up-to-date (use `force = TRUE` to update anyway)
+```
+
+
+## Timezones woes
+
+``` r
+db <- renmods_connect(convert_times = FALSE) # So we can grab the timezones
+#> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
+#> ✔ this_yr: Last downloaded 2026-04-14 11:26:37 (within 1 week(s))
+#> ✔ yr_2_5: Last downloaded 2026-04-14 11:27:35 (within 26 week(s))
+#> ✔ yr_5_10: Last downloaded 2026-04-14 11:28:33 (within 26 week(s))
+#> ✔ historic: Last downloaded 2026-04-14 11:32:12 (within 26 week(s))
+```
+
+Get timezones of all columns
+
+``` r
+time_cols <- stringr::str_subset(colnames(db), "Time")
+dplyr::select(db, dplyr::all_of(time_cols))
+#> # Source:   SQL [?? x 8]
+#> # Database: DuckDB 1.4.4 [steffi@Linux 6.17.0-20-generic:R 4.5.2/:memory:]
+#>    Field_Visit_Start_Time Field_Visit_End_Time   Observed_Date_Time     Observed_Date_Time_Start
+#>    <chr>                  <chr>                  <chr>                  <chr>                   
+#>  1 2025-09-24T13:31-08:00 <NA>                   2025-09-24T13:31-08:00 2025-09-24T13:31-08:00  
+#>  2 2025-08-05T00:00-08:00 <NA>                   2025-08-05T00:00-08:00 2025-08-05T00:00-08:00  
+#>  3 2025-12-15T17:25-08:00 <NA>                   2025-12-15T17:25-08:00 2025-12-15T17:25-08:00  
+#>  4 2025-06-17T08:00-08:00 2025-06-18T08:00-08:00 2025-06-17T08:00-08:00 2025-06-17T08:00-08:00  
+#>  5 2025-08-11T13:05-08:00 <NA>                   2025-08-11T13:05-08:00 2025-08-11T13:05-08:00  
+#>  6 2025-05-29T14:30-08:00 <NA>                   2025-05-29T14:30-08:00 2025-05-29T14:30-08:00  
+#>  7 2025-06-17T00:00-08:00 <NA>                   2025-06-17T00:00-08:00 2025-06-17T00:00-08:00  
+#>  8 2025-11-24T10:50-08:00 <NA>                   2025-11-24T10:50-08:00 2025-11-24T10:50-08:00  
+#>  9 2025-05-12T13:55-08:00 <NA>                   2025-05-12T13:55-08:00 2025-05-12T13:55-08:00  
+#> 10 2025-09-03T12:30-08:00 <NA>                   2025-09-03T12:30-08:00 2025-09-03T12:30-08:00  
+#> # ℹ more rows
+#> # ℹ 4 more variables: Observed_Date_Time_End <chr>, Analyzed_Date_Time <chr>,
+#> #   Lab_Arrival_Date_Time <chr>, Lab_Prepared_Date_Time <chr>
+
+for (t in time_cols) {
+  tt <- paste0("tz_", t)
+  db <- dplyr::mutate(db, !!tt := !!renmods:::sql_get_tz(t))
+}
+tz_cols <- paste0("tz_", time_cols)
+
+t <- list()
+for (tz in seq_along(tz_cols[-1])) {
+  comp <- paste(
+    time_cols[tz],
+    "vs",
+    time_cols[tz + 1]
+  )
+  cli_inform(paste("Comparing timezones for", comp))
+  t0 <- db |>
+    dplyr::filter(.data[[tz_cols[tz]]] != .data[[tz_cols[tz + 1]]]) |>
+    dplyr::collect()
+  t <- append(t, setNames(list(t0), comp))
+}
+#> Comparing timezones for Field_Visit_Start_Time vs Field_Visit_End_Time
+#> Comparing timezones for Field_Visit_End_Time vs Observed_Date_Time
+#> Comparing timezones for Observed_Date_Time vs Observed_Date_Time_Start
+#> Comparing timezones for Observed_Date_Time_Start vs Observed_Date_Time_End
+#> Comparing timezones for Observed_Date_Time_End vs Analyzed_Date_Time
+#> Comparing timezones for Analyzed_Date_Time vs Lab_Arrival_Date_Time
+#> Comparing timezones for Lab_Arrival_Date_Time vs Lab_Prepared_Date_Time
+```
+
+
+### List all observations with timezone mismatches
+
+Where there is more than one timezone in a row
+
+``` r
+tt <- t |>
+  purrr::list_rbind() |>
+  dplyr::distinct() |>
+  dplyr::select("Location_ID", "Observed_Date_Time", contains("Time"))
+```
+
+
+
+``` r
+# For precompilation
+saveRDS(tt, "precomp_tz1.rds")
+```
+
+
+
+```{r}
+# precomp step 2
+tt <- readRDS("precomp_tz1.rds")
+DT::datatable(
+  tt,
+  rownames = FALSE,
+  extensions = "Buttons",
+  options = list(
+    dom = "Bfrtip",
+    buttons = list(
+      I("colvis"),
+      list(extend = "csv", title = paste0("enmods_tz_", Sys.Date())),
+      list(extend = "excel", title = paste0("enmods_tz_", Sys.Date()))
+    )
+  )
+)
+```
+
+### List all observations with unexpected timezones
+
+Any timezone except -6, -7, -8
+
+
+
+``` r
+tt <- db |>
+  dplyr::filter(dplyr::if_any(dplyr::contains("tz"), \(x) {
+    !x %in% c("-08:00", "-07:00", "-06:00")
+  })) |>
+  dplyr::select("Location_ID", "Observed_Date_Time", contains("Time")) |>
+  collect()
+```
+
+
+``` r
+# For precompilation
+saveRDS(tt, "precomp_tz2.rds")
+```
+
+
+
+```{r}
+# precomp step 2
+tt <- readRDS("precomp_tz2.rds")
+DT::datatable(
+  tt,
+  rownames = FALSE,
+  extensions = "Buttons",
+  options = list(
+    dom = "Bfrtip",
+    buttons = list(
+      I("colvis"),
+      list(extend = "csv", title = paste0("enmods_tz_", Sys.Date())),
+      list(extend = "excel", title = paste0("enmods_tz_", Sys.Date()))
+    )
+  )
+)
+```
