@@ -53,11 +53,12 @@ participating in this project you agree to abide by its terms.
 ## Code Coverage
 
 ``` R
-#> renmods Coverage: 78.52%
-#> R/cache.R: 59.46%
-#> R/checks.R: 72.46%
-#> R/db.R: 87.04%
+#> renmods Coverage: 83.09%
+#> R/checks.R: 62.11%
+#> R/db.R: 88.33%
+#> R/cache.R: 89.19%
 #> R/utils.R: 89.19%
+#> R/db_utils.R: 100.00%
 #> R/download.R: 100.00%
 #> R/test-utils.R: 100.00%
 #> R/zzz.R: 100.00%

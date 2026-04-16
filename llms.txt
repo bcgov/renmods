@@ -53,11 +53,12 @@ participating in this project you agree to abide by its terms.
 ## Code Coverage
 
 ``` R
-#> renmods Coverage: 78.52%
-#> R/cache.R: 59.46%
-#> R/checks.R: 72.46%
-#> R/db.R: 87.04%
+#> renmods Coverage: 83.09%
+#> R/checks.R: 62.11%
+#> R/db.R: 88.33%
+#> R/cache.R: 89.19%
 #> R/utils.R: 89.19%
+#> R/db_utils.R: 100.00%
 #> R/download.R: 100.00%
 #> R/test-utils.R: 100.00%
 #> R/zzz.R: 100.00%
@@ -96,6 +97,10 @@ See the License for the specific language governing permissions and limitations 
   : View cache status
 - [`collect`](https://bcgov.github.io/renmods/reference/collect.md) :
   Force computation of a database query
+- [`db_add_date()`](https://bcgov.github.io/renmods/reference/db_add_date.md)
+  : Create new field with local date
+- [`db_fmt_times()`](https://bcgov.github.io/renmods/reference/db_fmt_times.md)
+  : Convert to date/time
 - [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md)
   : Connect to ENMODS data via DuckDB
 - [`renmods_disconnect()`](https://bcgov.github.io/renmods/reference/renmods_disconnect.md)
@@ -107,4 +112,9 @@ See the License for the specific language governing permissions and limitations 
 
 ### All vignettes
 
+- [Working with the
+  cache](https://bcgov.github.io/renmods/articles/cache.md):
+- [renmods](https://bcgov.github.io/renmods/articles/data_problems.md):
+- [renmods
+  variables](https://bcgov.github.io/renmods/articles/renmods_variables.md):
 - [renmods](https://bcgov.github.io/renmods/articles/renmods.md):

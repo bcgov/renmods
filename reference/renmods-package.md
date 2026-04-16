@@ -8,6 +8,8 @@ Useful links:
 
 - <https://github.com/bcgov/renmods>
 
+- <https://bcgov.github.io/renmods/>
+
 - Report bugs at <https://github.com/bcgov/renmods/issues>
 
 ## Author

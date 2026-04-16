@@ -1,0 +1,14 @@
+# renmods variables
+
+ENMODS contains many variables and parameters. They have a reference
+list for these variables online:
+<https://www2.gov.bc.ca/gov/content/environment/research-monitoring-reporting/monitoring/environmental-monitoring-data-system#resources>
+
+renmods adds a couple of extra variables created from the data.
+
+- `filename` - This is the original file name and location of the
+  downloaded data
+- `ren_date` - This is the local Date drawn from the
+  `Observed_Date_Time` column
+- `tz` - This is the original timezone of the data, retrieved from
+  `Observed_Date_Time` before it was converted to UTC-7:00.

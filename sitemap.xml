@@ -4,8 +4,11 @@
 <url><loc>https://bcgov.github.io/renmods/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/CONTRIBUTING.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/LICENSE-text.html</loc></url>
+<url><loc>https://bcgov.github.io/renmods/articles/cache.html</loc></url>
+<url><loc>https://bcgov.github.io/renmods/articles/data_problems.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/articles/index.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/articles/renmods.html</loc></url>
+<url><loc>https://bcgov.github.io/renmods/articles/renmods_variables.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/authors.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/index.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/news/index.html</loc></url>
@@ -13,6 +16,8 @@
 <url><loc>https://bcgov.github.io/renmods/reference/cache_remove.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/reference/cache_status.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/reference/collect.html</loc></url>
+<url><loc>https://bcgov.github.io/renmods/reference/db_add_date.html</loc></url>
+<url><loc>https://bcgov.github.io/renmods/reference/db_fmt_times.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/reference/index.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/reference/renmods-package.html</loc></url>
 <url><loc>https://bcgov.github.io/renmods/reference/renmods_connect.html</loc></url>
