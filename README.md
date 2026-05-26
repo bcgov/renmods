@@ -39,7 +39,7 @@ pkg_install("bcgov/renmods")
 ### Usage
 
 See the [Get
-Started](https://steffilazerte.github.io/renmods/articles/renmods.html)
+Started](https://bcgov.github.io/renmods/articles/renmods.html)
 tutorial for details
 
 ### Project Status
