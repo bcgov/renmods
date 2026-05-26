@@ -3,6 +3,7 @@
 ## Setup
 
 ``` r
+
 library(renmods)
 library(lubridate)
 ```
@@ -10,6 +11,7 @@ library(lubridate)
 Download/update the data
 
 ``` r
+
 renmods_update(type = "all") # Consider force = TRUE
 #> ✔ this_yr: Last downloaded 2026-04-14 11:26:37 (within 1 week(s))
 #> ✔ Data 'this_yr' already present and up-to-date (use `force = TRUE` to update anyway)
@@ -24,6 +26,7 @@ renmods_update(type = "all") # Consider force = TRUE
 ## Timezones woes
 
 ``` r
+
 db <- renmods_connect(convert_times = FALSE) # So we can grab the timezones
 #> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
 #> ✔ this_yr: Last downloaded 2026-04-14 11:26:37 (within 1 week(s))
@@ -35,6 +38,7 @@ db <- renmods_connect(convert_times = FALSE) # So we can grab the timezones
 Get timezones of all columns
 
 ``` r
+
 time_cols <- stringr::str_subset(colnames(db), "Time")
 dplyr::select(db, dplyr::all_of(time_cols))
 #> # Source:   SQL [?? x 8]
@@ -88,6 +92,7 @@ for (tz in seq_along(tz_cols[-1])) {
 Where there is more than one timezone in a row
 
 ``` r
+
 tt <- t |>
   purrr::list_rbind() |>
   dplyr::distinct() |>
@@ -95,11 +100,13 @@ tt <- t |>
 ```
 
 ``` r
+
 # For precompilation
 saveRDS(tt, "precomp_tz1.rds")
 ```
 
 ``` r
+
 # precomp step 2
 tt <- readRDS("precomp_tz1.rds")
 DT::datatable(
@@ -122,6 +129,7 @@ DT::datatable(
 Any timezone except -6, -7, -8
 
 ``` r
+
 tt <- db |>
   dplyr::filter(dplyr::if_any(dplyr::contains("tz"), \(x) {
     !x %in% c("-08:00", "-07:00", "-06:00")
@@ -131,11 +139,13 @@ tt <- db |>
 ```
 
 ``` r
+
 # For precompilation
 saveRDS(tt, "precomp_tz2.rds")
 ```
 
 ``` r
+
 # precomp step 2
 tt <- readRDS("precomp_tz2.rds")
 DT::datatable(

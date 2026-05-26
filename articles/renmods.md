@@ -3,6 +3,7 @@
 ## Connecting to the database
 
 ``` r
+
 library(renmods)
 library(lubridate)
 ```
@@ -10,12 +11,14 @@ library(lubridate)
 Download/update the data and save to your cache.
 
 ``` r
+
 renmods_update(type = "all")
 ```
 
 Connect to the database ENMODS table
 
 ``` r
+
 db <- renmods_connect()
 #> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
 #> ✔ this_yr: Last downloaded 2026-04-14 11:26:37 (within 1 week(s))
@@ -27,6 +30,7 @@ db <- renmods_connect()
 Optionally, prefilter by data type or date range.
 
 ``` r
+
 db <- renmods_connect(type = "this_yr")
 #> ℹ Connecting to "this_yr" data
 #> ✔ this_yr: Last downloaded 2026-04-14 11:26:37 (within 1 week(s))
@@ -46,6 +50,7 @@ working/saving. The smaller the data set and the fewer data types, the
 fast this will go.
 
 ``` r
+
 df <- collect(db)
 ```
 
@@ -53,6 +58,7 @@ Or use the dplyr package to do more filtering before you collect the
 data.
 
 ``` r
+
 library(dplyr)
 ```
 
@@ -60,6 +66,7 @@ First we’ll check out what’s in the data by exploring the first couple
 data points
 
 ``` r
+
 glimpse(db)
 #> Rows: ??
 #> Columns: 70
@@ -139,6 +146,7 @@ glimpse(db)
 Remind yourself of the column names
 
 ``` r
+
 colnames(db)
 #>  [1] "Ministry_Contact"                "Sampling_Agency"                
 #>  [3] "Project"                         "Project_Name"                   
@@ -180,6 +188,7 @@ colnames(db)
 Now we can filter by column values and collect the data into R
 
 ``` r
+
 df <- db |>
   filter(Location_ID %in% c("E303052", "E309247")) |>
   collect()
@@ -210,6 +219,7 @@ df
 You can also pre-select your columns of interest.
 
 ``` r
+
 df <- db |>
   filter(Location_ID %in% c("E303052", "E309247")) |>
   select(
@@ -262,6 +272,7 @@ We can see that we’re in UTC -7 by looking at the first couple of
 values.
 
 ``` r
+
 df$Observed_Date_Time[1:5]
 #> [1] "2026-01-05 15:35:00 -07" "2026-01-28 12:32:00 -07" "2026-01-02 13:19:00 -07"
 #> [4] "2026-01-25 13:08:00 -07" "2026-01-14 12:59:00 -07"
@@ -272,6 +283,7 @@ If we want to be in UTC -6:00 we can convert with lubridate’s
 function.
 
 ``` r
+
 with_tz(df$Observed_Date_Time[1:5], tz = "Etc/GMT+6")
 #> [1] "2026-01-05 16:35:00 -06" "2026-01-28 13:32:00 -06" "2026-01-02 14:19:00 -06"
 #> [4] "2026-01-25 14:08:00 -06" "2026-01-14 13:59:00 -06"
@@ -284,6 +296,7 @@ DST depending on the time of year), we could use the `America/Edmonton`
 timezone.
 
 ``` r
+
 df_tz <- mutate(
   df,
   Observed_Date_Time = with_tz(Observed_Date_Time, "America/Edmonton")
@@ -301,6 +314,7 @@ from dplyr.
 First we’ll get the whole data set again
 
 ``` r
+
 df <- renmods_connect(dates = c("2024-12-15", "2025-01-15")) |>
   collect()
 #> ℹ Connecting to "this_yr" and "yr_2_5" data for dates between 2024-12-15 and 2025-01-15
@@ -311,6 +325,7 @@ df <- renmods_connect(dates = c("2024-12-15", "2025-01-15")) |>
 What time columns do we have?
 
 ``` r
+
 select(df, contains("Time"))
 #> # A tibble: 127,293 × 8
 #>    Field_Visit_Start_Time Field_Visit_End_Time Observed_Date_Time  Observed_Date_Time_Start
@@ -335,6 +350,7 @@ We can use the tidyselector
 with across to apply a function *across* a series of columns.
 
 ``` r
+
 df_tz <- mutate(
   df,
   across(contains("Time"), \(col) with_tz(col, "America/Edmonton"))
@@ -353,6 +369,7 @@ Finally, you can also prevent any date/time conversion and leave those
 fields as character.
 
 ``` r
+
 df <- renmods_connect(
   dates = c("2024-12-15", "2025-01-15"),
   convert_times = FALSE
@@ -387,5 +404,6 @@ select(df, contains("Time"))
 Don’t forget to close the connection to the database
 
 ``` r
+
 renmods_disconnect(db)
 ```

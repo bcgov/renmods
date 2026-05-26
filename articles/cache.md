@@ -1,12 +1,14 @@
 # Working with the cache
 
 ``` r
+
 library(renmods)
 ```
 
 Where is my cache?
 
 ``` r
+
 cache_dir()
 #> [1] "/home/steffi/.local/share/R/renmods"
 ```
@@ -14,6 +16,7 @@ cache_dir()
 What’s the status of my cache?
 
 ``` r
+
 cache_status()
 #> # A tibble: 4 × 5
 #>   type     last_downloaded     date_range               renmods_version path                            
@@ -27,5 +30,6 @@ cache_status()
 Remove my cache
 
 ``` r
+
 cache_remove()
 ```

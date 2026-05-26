@@ -19,6 +19,7 @@ Columbia](https://www2.gov.bc.ca/gov/content?id=A519A56BC2BF44E4A008B33FCF527F61
 ### Installation
 
 ``` r
+
 # install.packages("pak") # if not already installed
 
 library(pak)
@@ -28,8 +29,8 @@ pkg_install("bcgov/renmods")
 ### Usage
 
 See the [Get
-Started](https://steffilazerte.github.io/renmods/articles/renmods.html)
-tutorial for details
+Started](https://bcgov.github.io/renmods/articles/renmods.html) tutorial
+for details
 
 ### Project Status
 
