@@ -3,10 +3,12 @@
 ## Be careful
 
 - Is the update frequency in `renmods()$update` appropriate?
-- `cache_meta()` uses `extract_date_range()` to pull the original file
-  name from the downloaded `*.csv.gz`. Currently that is a date range
-  for the file, which is how we get the date ranges of different data
-  sets. However, if the file names change this might break.
+- `cache_meta()` uses
+  [`extract_date_range()`](https://bcgov.github.io/renmods/reference/extract_date_range.md)
+  to pull the original file name from the downloaded `*.csv.gz`.
+  Currently that is a date range for the file, which is how we get the
+  date ranges of different data sets. However, if the file names change
+  this might break.
 - Note the custom `ask()` function which always returns `TRUE` if in a
   non-interactive session.
 - The `ask()` function also uses
@@ -105,9 +107,11 @@ cache.
   - `cache_meta()` is very similar to
     [`cache_status()`](https://bcgov.github.io/renmods/reference/cache_status.md)
     but is also used to update/reset the cache metadata.
-  - `cache_meta()` uses `extract_date_range()` to pull the original file
-    name from the downloaded `*.csv.gz`. Currently that is a date range
-    for the file, but if the file names change this might break.
+  - `cache_meta()` uses
+    [`extract_date_range()`](https://bcgov.github.io/renmods/reference/extract_date_range.md)
+    to pull the original file name from the downloaded `*.csv.gz`.
+    Currently that is a date range for the file, but if the file names
+    change this might break.
 - Cache functions are meant to check for cache, create cache and prompt
   updates as needed. It is sometimes a bit convoluted and they are
   extremely chatty, so it might be worth adding silencing options in

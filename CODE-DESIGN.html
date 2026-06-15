@@ -45,7 +45,7 @@
 <h2 id="be-careful">Be careful<a class="anchor" aria-label="anchor" href="#be-careful"></a></h2>
 <ul><li>Is the update frequency in <code>renmods()$update</code> appropriate?</li>
 <li>
-<code>cache_meta()</code> uses <code>extract_date_range()</code> to pull the original file name from the downloaded <code>*.csv.gz</code>. Currently that is a date range for the file, which is how we get the date ranges of different data sets. However, if the file names change this might break.</li>
+<code>cache_meta()</code> uses <code><a href="reference/extract_date_range.html">extract_date_range()</a></code> to pull the original file name from the downloaded <code>*.csv.gz</code>. Currently that is a date range for the file, which is how we get the date ranges of different data sets. However, if the file names change this might break.</li>
 <li>Note the custom <code>ask()</code> function which always returns <code>TRUE</code> if in a non-interactive session.</li>
 <li>The <code>ask()</code> function also uses <code><a href="https://rlang.r-lib.org/reference/is_interactive.html" class="external-link">rlang::is_interactive()</a></code> which works better with testthat (always assumes ‘FALSE’ in tests)</li>
 <li>Current data types are: <code>this_yr</code>, <code>yr_2_5</code>, <code>yr_5_10</code>, <code>historic</code>
@@ -133,7 +133,7 @@
 <ul><li>
 <code>cache_meta()</code> is very similar to <code><a href="reference/cache_status.html">cache_status()</a></code> but is also used to update/reset the cache metadata.</li>
 <li>
-<code>cache_meta()</code> uses <code>extract_date_range()</code> to pull the original file name from the downloaded <code>*.csv.gz</code>. Currently that is a date range for the file, but if the file names change this might break.</li>
+<code>cache_meta()</code> uses <code><a href="reference/extract_date_range.html">extract_date_range()</a></code> to pull the original file name from the downloaded <code>*.csv.gz</code>. Currently that is a date range for the file, but if the file names change this might break.</li>
 </ul></li>
 <li>Cache functions are meant to check for cache, create cache and prompt updates as needed. It is sometimes a bit convoluted and they are extremely chatty, so it might be worth adding silencing options in future</li>
 </ul></div>

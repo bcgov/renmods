@@ -14,6 +14,8 @@
   : Create new field with local date
 - [`db_fmt_times()`](https://bcgov.github.io/renmods/reference/db_fmt_times.md)
   : Convert to date/time
+- [`extract_date_range()`](https://bcgov.github.io/renmods/reference/extract_date_range.md)
+  : Extract date range from gzip file metadata
 - [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md)
   : Connect to ENMODS data via DuckDB
 - [`renmods_disconnect()`](https://bcgov.github.io/renmods/reference/renmods_disconnect.md)
