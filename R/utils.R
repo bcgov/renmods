@@ -139,11 +139,15 @@ which_data_types <- function(dates) {
   meta <- cache_meta() |>
     dplyr::mutate(
       in_range = purrr::map_lgl(.data$date_range, \(dt) {
-        dates_data <- char_to_dt(dt)
-        !(dates_data[2] < dates[1] | dates_data[1] > dates[2])
+        if (!is.na(dt)) {
+          dates_data <- char_to_dt(dt)
+          !(dates_data[2] < dates[1] | dates_data[1] > dates[2])
+        } else {
+          NA
+        }
       })
     )
-  if (!any(meta$in_range)) {
+  if (!any(meta$in_range, na.rm = TRUE)) {
     cli_abort(
       "No data types cover this range of data ({dates}). See `cache_status()`. Do you need to update your data? See `renmods_update(\"this_yr\")`",
       call = NULL
