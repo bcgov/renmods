@@ -18,7 +18,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Steffi LaZerte \email{sel@steffilazerte.ca} (\href{https://orcid.org/0000-0002-7690-8360}{ORCID})
+\strong{Maintainer}: Karly Harker \email{karly.harker@gov.bc.ca} [contributor]
+
+Authors:
+\itemize{
+  \item Steffi LaZerte \email{sel@steffilazerte.ca} (\href{https://orcid.org/0000-0002-7690-8360}{ORCID})
+}
 
 Other contributors:
 \itemize{
