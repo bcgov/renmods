@@ -115,6 +115,7 @@ check_cache <- function(type, force = FALSE) {
     cli_alert_info(
       "Cached data is missing or a download was interrupted and should be updated"
     )
+    update <- TRUE
   } else if (!check_version(type)) {
     cli_alert_info(
       "Cached data is from an older version of the package and should be updated"
