@@ -149,7 +149,7 @@ which_data_types <- function(dates) {
     )
   if (!any(meta$in_range, na.rm = TRUE)) {
     cli_abort(
-      "No data types cover this range of data ({dates}). See `cache_status()`. Do you need to update your data? See `renmods_update(\"this_yr\")`",
+      "No data types cover this range of data ({dates}). See `cache_status()`. Do you need to update your data? See `?renmods_update()`",
       call = NULL
     )
   }
