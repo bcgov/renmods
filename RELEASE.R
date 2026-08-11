@@ -1,5 +1,10 @@
 # Steps to release a new version of the renmods package
 
+# For linux, install duckdb from Posit Public package manager (much faster!)
+# install.packages("duckdb", repos = sprintf(
+#   "https://p3m.dev/cran/latest/bin/linux/manylinux_2_28-%s/%s", R.version["arch"], substr(getRversion(), 1, 3)
+# ))
+
 # Bump version
 file.edit("DESCRIPTION")
 
