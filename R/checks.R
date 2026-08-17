@@ -111,6 +111,11 @@ check_cache <- function(type, force = FALSE) {
   } else if (force) {
     update <- TRUE
     cli_alert_info("Forcing update of cached data")
+  } else if (is.na(check_version(type))) {
+    cli_alert_info(
+      "Cached data is missing or a download was interrupted and should be updated"
+    )
+    update <- TRUE
   } else if (!check_version(type)) {
     cli_alert_info(
       "Cached data is from an older version of the package and should be updated"
@@ -234,7 +239,8 @@ check_db_icu <- function(con) {
 #'
 #' @param type Character. Single data type to check.
 #'
-#' @returns TRUE if matches, FALSE if data older than package
+#' @returns TRUE if matches, FALSE if data older than package, NA if a download
+#'   was interrupted
 #'
 #' @noRd
 #' @examples

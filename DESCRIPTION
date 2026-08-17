@@ -1,8 +1,9 @@
 Package: renmods
 Title: Downloads and queries data from B.C. Environmental Monitoring Data System (EnMoDs)
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: c(
-    person("Steffi", "LaZerte", email = "sel@steffilazerte.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-7690-8360")),
+    person("Steffi", "LaZerte", email = "sel@steffilazerte.ca", role = "aut", comment = c(ORCID = "0000-0002-7690-8360")),
+    person("Karly", "Harker", email = "karly.harker@gov.bc.ca", role = c("cre", "ctb")),
     person("Province of British Columbia", role = "cph")
   )
 Description: What the package does (one paragraph).
