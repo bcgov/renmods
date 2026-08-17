@@ -1,12 +1,12 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   articles/cache: cache.html
   articles/data_problems: data_problems.html
   articles/renmods_variables: renmods_variables.html
   articles/renmods: renmods.html
-last_built: 2026-06-15T20:21Z
+last_built: 2026-08-17T21:01Z
 urls:
   reference: https://bcgov.github.io/renmods/reference
   article: https://bcgov.github.io/renmods/articles

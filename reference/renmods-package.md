@@ -14,8 +14,12 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Steffi LaZerte <sel@steffilazerte.ca>
-([ORCID](https://orcid.org/0000-0002-7690-8360))
+**Maintainer**: Karly Harker <karly.harker@gov.bc.ca> \[contributor\]
+
+Authors:
+
+- Steffi LaZerte <sel@steffilazerte.ca>
+  ([ORCID](https://orcid.org/0000-0002-7690-8360))
 
 Other contributors:
 
