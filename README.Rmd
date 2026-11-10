@@ -38,10 +38,13 @@ The EnMoDs dataset is licensed under the [Open Government Licence - British Colu
 
 ### Features
 - Download EnMoDS data and cache locally
-- Simple connections to the EnMoDS database, only to as much data as required to speed up load times.
+- Converts to Parquet files for speedy connections and filtering
+- Straightforward data connections, only to as much data as required to speed up load times.
 
 
 ### Installation
+
+If installing on Linux, see the troubleshooting section below for a faster method.
 
 ```{r install}
 #| eval: false
@@ -51,9 +54,22 @@ library(pak)
 pkg_install("bcgov/renmods")
 ```
 
+### Updating
+After updating, it's recommended to remove your cache and re-download the data.
+The downloads will take a bit of time, but this will ensure there are no complications due to the update.
+
+Note that will get a warning if you try to work with data downloaded with a different version of renmods.
+
+```{r}
+#| eval: false
+library(renmods)
+cache_remove()
+renmods_update("all")
+```
+
 ### Usage
 
-See the [Get Started](https://steffilazerte.github.io/renmods/articles/renmods.html) tutorial for details
+See the [Get Started](https://bcgov.github.io/renmods/articles/renmods.html) tutorial for details
 
 
 ### Project Status
@@ -63,6 +79,27 @@ Very first stages of development.
 ### Getting Help or Reporting an Issue
 
 To report bugs/issues/feature requests, please file an [issue](https://github.com/bcgov/renmods/issues/).
+
+### Troubleshooting
+
+**Installing duckdb on Linux is so slow!!!**
+
+Solution: First install duckdb from the Posit Public Package Manager for Linux,
+then continue on with your installation of renmods.
+
+(ref: https://github.com/duckdb/duckdb-r#installation-from-cran)
+
+```{r}
+#| eval: false
+install.packages(
+  "duckdb",
+  repos = sprintf(
+    "https://p3m.dev/cran/latest/bin/linux/manylinux_2_28-%s/%s",
+    R.version["arch"],
+    substr(getRversion(), 1, 3)
+  )
+)
+```
 
 ### How to Contribute
 
