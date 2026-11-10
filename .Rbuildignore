@@ -13,3 +13,5 @@
 ^CODE-DESIGN\.md$
 ^RELEASE\.R$
 ^covr$
+^\.claude$
+^data-raw$

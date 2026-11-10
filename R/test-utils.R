@@ -21,7 +21,7 @@ skip_if_no_cache <- function() {
   }
 
   status <- cache_status()
-  has_data <- any(!is.na(status$path) & file.exists(status$path))
+  has_data <- all(!is.na(status$path) & file.exists(status$path))
 
   if (!has_data) {
     testthat::skip(

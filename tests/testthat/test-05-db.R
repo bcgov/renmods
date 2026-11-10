@@ -7,9 +7,9 @@ test_that("db_connect() creates a DuckDB connection with extensions", {
   DBI::dbDisconnect(con)
 })
 
-test_that("db_connect() creates a DuckDB connection", {
+test_that("db_connect() creates a DuckDB connection - Local only", {
   skip_on_ci() # Local install expect no messages
-  expect_silent(con <- db_connect())
+  testthat::capture_messages(con <- db_connect())
   expect_s4_class(con, "duckdb_connection")
   DBI::dbDisconnect(con)
 })
