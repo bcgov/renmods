@@ -26,7 +26,7 @@ renmods_update(type = "all")
 ```
 
 
-Connect to the database ENMODS table
+Connect to the database EnMoDS table
 
 
 ``` r
@@ -261,7 +261,7 @@ df
 
 ## Dates and Times
 
-ENMODS stores date/times as character/text fields with the timezone indicated by +/- offset (e.g., '-08:00'). However, in R all values in a column must use the same timezone. Therefore renmods converts times to UTC-7:00
+EnMoDS stores date/times as character/text fields with the timezone indicated by +/- offset (e.g., '-08:00'). However, in R all values in a column must use the same timezone. Therefore renmods converts times to UTC-7:00
 (called `Etc/GMT+7`, note that `+` is correct; see the [Wikipedia page on
 timezones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)).
 

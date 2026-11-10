@@ -12,9 +12,9 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-#' Connect to ENMODS data via DuckDB
+#' Connect to EnMoDS data via DuckDB
 #'
-#' Creates a DuckDB connection to cached ENMODS data. The database table can be
+#' Creates a DuckDB connection to cached EnMoDS data. The database table can be
 #' filtered using dplyr before collecting into a data frame with `collect()`.
 #' Using `dates` (date range) or `types` (data types) prefilters the data to a
 #' specific date range or specific data file. But if both are supplied, `dates`
@@ -22,7 +22,7 @@
 #' fewer data sources connected to and the smaller the dataset, the quicker the
 #' `collect()` function will run.
 #'
-#' Note that ENMODS stores date/times as character/text fields with the timezone
+#' Note that EnMoDS stores date/times as character/text fields with the timezone
 #' indicated by +/- offset (e.g., '-08:00'). However, in R all values in a
 #' column must use the same timezone. Therefore times are converted to UTC-7:00
 #' (called `Etc/GMT+7`, note that `+` is correct; see the [Wikipedia page on
@@ -89,7 +89,7 @@ renmods_connect <- function(dates = NULL, types = "all", convert_times = TRUE) {
   # Check cache exists
   if (!cache_dir(check_only = TRUE)) {
     cli_abort(
-      "No ENMODS data has been downloaded. First try `renmods_update()`",
+      "No EnMoDS data has been downloaded. First try `renmods_update()`",
       call = NULL
     )
   }

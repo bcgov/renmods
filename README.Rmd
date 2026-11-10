@@ -37,8 +37,8 @@ An R package to download, import, and filter data from [B.C.’s Environmental M
 The EnMoDs dataset is licensed under the [Open Government Licence - British Columbia](https://www2.gov.bc.ca/gov/content?id=A519A56BC2BF44E4A008B33FCF527F61).
 
 ### Features
-- Download ENMODS data and cache locally
-- Simple connections to the ENMODS database, only to as much data as required to speed up load times.
+- Download EnMoDS data and cache locally
+- Simple connections to the EnMoDS database, only to as much data as required to speed up load times.
 
 
 ### Installation

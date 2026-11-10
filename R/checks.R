@@ -180,7 +180,7 @@ check_db_httpsfs <- function(con) {
   con <- tryCatch(DBI::dbExecute(con, "LOAD httpfs"), error = \(e) {
     if (stringr::str_detect(e$message, "INSTALL httpfs")) {
       install <- ask(
-        "'httpfs', a DuckDB extension required to read ENMODS data, is not is not available, install?",
+        "'httpfs', a DuckDB extension required to read EnMoDS data, is not is not available, install?",
         "Installing DuckDB extension 'httpfs'"
       )
       if (install) {
@@ -188,7 +188,7 @@ check_db_httpsfs <- function(con) {
         return(con)
       } else {
         cli_abort(
-          "Cannot work with ENMODS data without the 'httpfs' extension",
+          "Cannot work with EnMoDS data without the 'httpfs' extension",
           call = NULL
         )
       }
@@ -217,7 +217,7 @@ check_db_icu <- function(con) {
   con <- tryCatch(DBI::dbExecute(con, "LOAD icu"), error = \(e) {
     if (stringr::str_detect(e$message, "INSTALL icu")) {
       install <- ask(
-        "'icu', a DuckDB extension required to handle date/times in ENMODS data, is not is not available, install?",
+        "'icu', a DuckDB extension required to handle date/times in EnMoDS data, is not is not available, install?",
         "Installing DuckDB extension 'icu'"
       )
       if (install) {
@@ -225,7 +225,7 @@ check_db_icu <- function(con) {
         return(con)
       } else {
         cli_abort(
-          "Cannot work with ENMODS data without the 'icu' extension",
+          "Cannot work with EnMoDS data without the 'icu' extension",
           call = NULL
         )
       }

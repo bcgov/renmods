@@ -23,7 +23,7 @@
 #'   \item{\code{renmods.cache_dir}}{Directory for caching downloaded data.
 #'     Default: \code{NULL} (uses \code{tools::R_user_dir("renmods", "cache")}).
 #'     Set to a custom path to override default location.}
-#'   \item{\code{renmods.urls}}{Named list of URLs for ENMODS data sources.
+#'   \item{\code{renmods.urls}}{Named list of URLs for EnMoDS data sources.
 #'     Contains: \code{this_yr}, \code{yr_2_5}, \code{yr_5_10}, and
 #'     \code{historic}. URLs are provided by default but can be overridden.}
 #' }

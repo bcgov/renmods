@@ -39,7 +39,7 @@ test_that("db_connect() has httpfs extension available", {
 test_that("renmods_connect() requires cached data", {
   withr::local_options(list(renmods.cache_dir = "temp"))
 
-  expect_error(renmods_connect(), "No ENMODS data has been downloaded")
+  expect_error(renmods_connect(), "No EnMoDS data has been downloaded")
 })
 
 test_that("renmods_connect() & renmods_disconnect()", {

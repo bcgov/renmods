@@ -59,7 +59,7 @@ cache_dir <- function(check_only = FALSE) {
 
 #' Get cache file paths for data types
 #'
-#' Returns the full file paths for where ENMODS data files would be cached. Note
+#' Returns the full file paths for where EnMoDS data files would be cached. Note
 #' they do not have to exist.
 #'
 #' @param types Character. Data types to get paths for.
@@ -83,7 +83,7 @@ cache_path <- function(types) {
 #' the last download dates for the cache. Users should use `cache_status()`
 #' instead.
 #'
-#' @param types Character. Types of ENMODS data to check.
+#' @param types Character. Types of EnMoDS data to check.
 #' @param update Logical. Whether or not to update the metadata (assumes data
 #'   has just been downloaded).
 #' @param reset Logical. Whether to reset the metadata for a data type to blank.
@@ -134,7 +134,7 @@ cache_meta <- function(types = renmods()$types, update = FALSE, reset = FALSE) {
 
 #' View cache status
 #'
-#' Returns information about cached ENMODS data including when each data type
+#' Returns information about cached EnMoDS data including when each data type
 #' was last downloaded, the date range it covers, and the file path.
 #'
 #' @returns Data frame with columns:
@@ -159,9 +159,9 @@ cache_status <- function() {
 
 #' Remove cached data
 #'
-#' Deletes cached ENMODS data files. Use with caution as this will require
-#' re-downloading data. In interactive mode, prompts for confirmation before
-#' deletion.
+#' Deletes cached EnMoDS parquet data files. Use with caution as this will
+#' require re-downloading data. In interactive mode, prompts for confirmation
+#' before deletion.
 #'
 #' @param types Character. Which data types to remove. Either "all" (default)
 #'   to remove all cached data and the cache directory, or one or more of

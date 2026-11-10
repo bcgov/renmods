@@ -12,9 +12,9 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-#' Update cached ENMODS data
+#' Update cached EnMoDS data
 #'
-#' Downloads ENMODS data from BC Gov and saves to the local cache.
+#' Downloads EnMoDS data from BC Gov and saves to the local cache.
 #' By default, only missing or outdated data is downloaded.
 #'
 #' @param types Character. Which data types to update. One or more of
@@ -60,7 +60,7 @@ renmods_update <- function(types = "this_yr", force = FALSE) {
 
 #' Internal function to download data
 #'
-#' Downloads a single data type from ENMODS and updates cache metadata.
+#' Downloads a single data type from EnMoDS and updates cache metadata.
 #' This is the internal worker function called by `renmods_update()`.
 #'
 #' @param type Character. Single data type to download.
