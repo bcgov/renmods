@@ -105,7 +105,7 @@ check_dates <- function(dates, range = FALSE) {
 check_cache <- function(type, force = FALSE) {
   update <- FALSE
 
-  path <- cache_path(type)
+  path <- cache_path(type, "parquet")
   if (!file.exists(path)) {
     update <- TRUE
   } else if (force) {
@@ -117,7 +117,7 @@ check_cache <- function(type, force = FALSE) {
     )
     update <- TRUE
   } else if (!check_version(type)) {
-    cli_alert_info(
+    cli_alert_warning(
       "Cached data is from an older version of the package and should be updated"
     )
     update <- TRUE

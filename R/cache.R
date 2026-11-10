@@ -70,10 +70,12 @@ cache_dir <- function(check_only = FALSE) {
 #' @examples
 #' cache_path("this_yr")
 #' cache_path(c("this_yr", "yr_2_5"))
+#' cache_path("this_yr", ext = "parquet")
+#' cache_path(c("this_yr", "yr_2_5"), ext = "parquet")
 
-cache_path <- function(types) {
+cache_path <- function(types, ext = "csv.gz") {
   types <- check_types(types)
-  path <- file.path(cache_dir(), paste0(types, ".csv.gz"))
+  path <- file.path(cache_dir(), paste0(types, ".", ext))
   path
 }
 
@@ -108,10 +110,14 @@ cache_meta <- function(types = renmods()$types, update = FALSE, reset = FALSE) {
   }
 
   if (update) {
-    f <- cache_path(types)
-    f <- f[file.exists(f)]
+    # Which files do we have (this will be run before csv.gz files are removed)
+    f_csv <- cache_path(types)
+    f_csv <- f_csv[file.exists(f_csv)]
 
-    dates <- extract_date_range(f)
+    f_parquet <- cache_path(types, "parquet")
+    f_parquet <- f_parquet[file.exists(f_parquet)]
+
+    dates <- extract_date_range(f_csv)
 
     meta <- dplyr::rows_upsert(
       meta,
@@ -120,10 +126,12 @@ cache_meta <- function(types = renmods()$types, update = FALSE, reset = FALSE) {
         last_downloaded = as.character(round(Sys.time())),
         date_range = dates,
         renmods_version = as.character(utils::packageVersion("renmods")),
-        path = f
+        path = f_parquet
       ),
       by = "type"
     )
+
+    cli_alert_success("Cache metadata updated")
   } else if (reset) {
     meta <- dplyr::rows_upsert(meta, meta_blank(types), by = "type")
   }

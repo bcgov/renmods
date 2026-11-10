@@ -21,6 +21,8 @@
 #'   "this_yr", "yr_2_5", "yr_5_10", "historic", or "all" (default "this_yr").
 #' @param force Logical. If `TRUE`, downloads data even if cache is up-to-date
 #'   (default `FALSE`).
+#' @param cleanup Logical. Whether to remove the downloaded `csv.gz` file(s)
+#'   after conversion to parquet. Defaults to TRUE.
 #'
 #' @returns `NULL` invisibly. Called for side effect of downloading data.
 #'
@@ -37,12 +39,12 @@
 #' renmods_update(c("this_yr", "yr_2_5"), force = TRUE)
 #' }
 
-renmods_update <- function(types = "this_yr", force = FALSE) {
+renmods_update <- function(types = "this_yr", force = FALSE, cleanup = TRUE) {
   types <- check_types(types)
 
   # Repeat for "all" if requested
   if (length(types) > 1) {
-    purrr::walk(types, \(t) renmods_update(t, force = force))
+    purrr::walk(types, \(t) renmods_update(t, force = force, cleanup = cleanup))
     return(invisible())
   }
 
@@ -50,9 +52,9 @@ renmods_update <- function(types = "this_yr", force = FALSE) {
   type <- types
 
   if (check_cache(type, force)) {
-    renmods_update_(type)
+    renmods_update_(type, cleanup)
   } else {
-    cli_alert_success(
+    cli_alert_info(
       "Data '{type}' already present and up-to-date (use `force = TRUE` to update anyway)"
     )
   }
@@ -64,6 +66,8 @@ renmods_update <- function(types = "this_yr", force = FALSE) {
 #' This is the internal worker function called by `renmods_update()`.
 #'
 #' @param type Character. Single data type to download.
+#' @param cleanup Logical. Whether to remove the `csv.gz` file(s) after
+#'   conversion to parquet. Defaults to TRUE.
 #'
 #' @returns `NULL` invisibly. Called for side effect of downloading data.
 #'
@@ -73,13 +77,33 @@ renmods_update <- function(types = "this_yr", force = FALSE) {
 #'   renmods_update_("this_yr")
 #' }
 
-renmods_update_ <- function(type) {
+renmods_update_ <- function(type, cleanup = TRUE) {
+  cli_par()
+  cli_h2("Updating '{type}' data from EnMoDS")
+
+  download_csv(type)
+  convert_parquet(type)
+
+  # Record metadata
+  cache_meta(types = type, update = TRUE)
+
+  # Finally remove the csv.gz files
+  if (cleanup) {
+    s <- file.remove(cache_path(type))
+    if (s) {
+      cli_alert_success("csv.gz file successfull removed")
+    } else {
+      cli_alert_warning("Could not remove csv.gz file")
+    }
+  }
+}
+
+download_csv <- function(type) {
   path <- cache_path(type)
   url <- getOption("renmods.urls")[[type]]
 
-  cli_par()
-  cli_alert("Downloading '{type}' data from ENMODS")
-  cli_alert_info("Saving to cache: {path}")
+  cli_alert_info("Downloading csv.gz from EnMoDS")
+  cli_alert_success("Saving to cache: {path}")
 
   # Remove file from metadata - In case download aborted, metadata is correct
   cache_meta(types = type, reset = TRUE)
@@ -88,8 +112,50 @@ renmods_update_ <- function(type) {
     httr2::req_progress() |>
     httr2::req_perform(path = path)
 
-  # Record metadata
-  cache_meta(types = type, update = TRUE)
+  cli_alert_success("Successfully downloaded")
+}
 
-  cli_alert_success("Data '{type}' successfully downloaded")
+convert_parquet <- function(type) {
+  path_csv <- cache_path(type, "csv.gz")
+  path_parquet <- cache_path(type, "parquet")
+  path_parquet_temp <- cache_path(type, "parquet.tmp")
+
+  cli_alert_info("Converting to Parquet: {path_parquet}")
+  cli_alert_success("Saving to cache: {path_parquet}")
+
+  con <- db_connect()
+  var_cols <- c("Result_Value", db_time_cols(con, path_csv))
+  var_cols <- paste0("'", var_cols, "': 'VARCHAR'", collapse = ",")
+
+  # - Read csv
+  # - Keep Result_Value and Time columns as VARCHAR for now
+  #     - https://duckdb.org/docs/2.0/data/csv/auto_detection#type-detection
+  #     - convert Result_Value when connecting
+  #     - get dates and timezones before formatting date/time cols
+  # fmt:skip
+  sql_csv <- paste0(
+    "read_csv(['", paste0(path_csv, collapse = "', '"), "'], ",
+    "types = {", var_cols, "},",
+    "compression = 'gzip')"
+  )
+
+  sql <- con |>
+    duckdb::tbl_function(sql_csv) |>
+    db_add_date(date_col = "ren_date") |>
+    # Set sort to improve read times later
+    dplyr::arrange(.data$Location_ID, .data$ren_date) |>
+    dbplyr::sql_render() # Convert to sql string to use in parquet
+
+  # Apply the formatting steps and convert to parquet
+  # fmt: skip
+  DBI::dbExecute(
+    con,    
+    paste0("COPY (", sql, ") TO '", path_parquet_temp, "' ",
+           "(FORMAT parquet, COMPRESSION zstd)")
+  )
+  DBI::dbDisconnect(con)
+
+  file.rename(path_parquet_temp, path_parquet)
+
+  cli_alert_success("Successfully converted to Parquet")
 }

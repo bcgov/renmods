@@ -14,7 +14,7 @@
 
 #' Connect to EnMoDS data via DuckDB
 #'
-#' Creates a DuckDB connection to cached EnMoDS data. The database table can be
+#' Creates a DuckDB connection to cached EnMoDS Parquet data. The database table can be
 #' filtered using dplyr before collecting into a data frame with `collect()`.
 #' Using `dates` (date range) or `types` (data types) prefilters the data to a
 #' specific date range or specific data file. But if both are supplied, `dates`
@@ -40,6 +40,8 @@
 #' @param convert_times Logical. Whether or not to convert character date/times
 #'   to date/time format in R. Defaults to `TRUE`. If `FALSE` remain as
 #'   character.
+#' @param tz_disp Character. Timezone in which to display the data. Default is
+#'   America/Vancouver (i.e. UTC-7)
 #'
 #' @returns A `tbl_duckdb_connection` object - a lazy DuckDB table. Use dplyr
 #'   functions to filter/select, then `collect()` to load into R memory.
@@ -49,8 +51,10 @@
 #' # All data
 #' db <- renmods_connect()
 #'
-#' # All current data
-#' db <- renmods_connect(types = "this_yr")
+#' # Filter and collect into a data frame
+#' df <- renmods_connect() |>
+#'   dplyr::filter(Location_ID %in% c("E327371", "E300230")) |>
+#'   collect()
 #'
 #' # Connect only to data types required for a specific date range
 #' db <- renmods_connect(dates = c("2025-01-01", "2025-02-01"))
@@ -64,7 +68,7 @@
 #' glimpse(db)
 #'
 #' # Filter and collect specific data
-#' df <- db |>
+#' df <- renmods_connect() |>
 #'   filter(Location_ID %in% c("E327371", "E300230")) |>
 #'   select(
 #'     "Location_ID", "Location_Name", "Observed_Date_Time",
@@ -76,7 +80,12 @@
 #' # Remember to shut down the connection when you're done
 #' renmods_disconnect(db)
 
-renmods_connect <- function(dates = NULL, types = "all", convert_times = TRUE) {
+renmods_connect <- function(
+  dates = NULL,
+  types = "all",
+  convert_times = TRUE,
+  tz_disp = "Etc/GMT+7"
+) {
   if (!is.null(dates)) {
     dates <- check_dates(dates, range = TRUE)
     types <- which_data_types(dates)
@@ -107,18 +116,17 @@ renmods_connect <- function(dates = NULL, types = "all", convert_times = TRUE) {
     if (u) renmods_update_(t)
   })
 
-  path <- cache_path(types)
+  path <- cache_path(types, "parquet")
 
   # https://duckdb.org/docs/stable/data/multiple_files/overview#csv
   sql <- paste0(
-    "read_csv(['",
+    "read_parquet(['",
     paste0(path, collapse = "', '"),
-    "'], compression = 'gzip', union_by_name = true, filename = true)"
+    "'], union_by_name = true, filename = true)"
   )
 
-  tbl <- db_connect() |>
-    duckdb::tbl_function(sql) |>
-    db_add_date(date_col = "ren_date")
+  tbl <- db_connect(tz_disp = tz_disp) |>
+    duckdb::tbl_function(sql)
 
   if (!is.null(dates)) {
     tbl <- tbl |>
@@ -153,18 +161,17 @@ renmods_connect <- function(dates = NULL, types = "all", convert_times = TRUE) {
 #' @examples
 #' con <- db_connect()
 
-db_connect <- function() {
+db_connect <- function(tz_disp = "Etc/GMT+7") {
   con <- DBI::dbConnect(
     duckdb::duckdb(),
     config = list(
       autoinstall_known_extensions = TRUE,
       autoload_known_extensions = TRUE
-    ),
-    timezone_out = "Etc/GMT+7", # Otherwise defaults to UTC
-    tz_out_convert = "with" # Convert timezones, do not force
+    )
   )
   check_db_httpsfs(con)
   check_db_icu(con)
+  DBI::dbExecute(con, paste0("SET TimeZone = '", tz_disp, "'"))
   con
 }
 
