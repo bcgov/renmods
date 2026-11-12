@@ -54,7 +54,7 @@ The original timezone from \code{Observed_Date_Time} is stored in a new field
 \code{\link[lubridate:with_tz]{lubridate::with_tz()}} function.
 }
 \examples{
-\dontshow{op <- renmods:::example_cache()}
+\dontshow{op <- renmods:::use_example_cache()}
 
 
 # All data

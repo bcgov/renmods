@@ -49,7 +49,7 @@
 #'
 #' @export
 #' @examples
-#' \dontshow{op <- renmods:::example_cache()}
+#' \dontshow{op <- renmods:::use_example_cache()}
 #'
 #'
 #' # All data
@@ -233,7 +233,7 @@ db_connect <- function(tz_disp = "Etc/GMT+7") {
 #'
 #' @export
 #' @examples
-#' \dontshow{op <- renmods:::example_cache()}
+#' \dontshow{op <- renmods:::use_example_cache()}
 #' db <- renmods_connect()
 #' renmods_disconnect(db)
 #' \dontshow{options(op)}

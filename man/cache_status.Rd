@@ -25,7 +25,7 @@ was last downloaded, the date range it covers, and the file path.
 cache_status()
 
 # After download
-\dontshow{op <- renmods:::example_cache()}
+\dontshow{op <- renmods:::use_example_cache()}
 cache_status()
 \dontshow{options(op)}
 }
