@@ -98,7 +98,7 @@ renmods_update_ <- function(type, cleanup = TRUE) {
   }
 }
 
-download_csv <- function(type) {
+download_csv <- function(type, internal = FALSE) {
   path <- cache_path(type)
   url <- getOption("renmods.urls")[[type]]
 
@@ -106,7 +106,9 @@ download_csv <- function(type) {
   cli_alert_success("Saving to cache: {path}")
 
   # Remove file from metadata - In case download aborted, metadata is correct
-  cache_meta(types = type, reset = TRUE)
+  if (!internal) {
+    cache_meta(types = type, reset = TRUE)
+  }
 
   httr2::request(url) |>
     httr2::req_progress() |>

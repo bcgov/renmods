@@ -1,19 +1,16 @@
+# Example Downloaded Data ---------------------------------------------------
+
 # Create small test data sets from real downloaded data
+# Ensure your data is up-to-date before proceeding!
+renmods_update(types = "all")
 
-download_csv("this_yr")
+create_example_download_file()
 
-test_data_path <- file.path(testthat::test_path(
-  "fixtures",
-  "20250101_to_20261107.csv"
-))
-lines <- readLines(gzfile(cache_path("this_yr")), n = 5)
-writeLines(lines, test_data_path)
-system2(
-  "gzip",
-  c("-c", test_data_path),
-  stdout = testthat::test_path("fixtures", "this_year.csv.gz")
-)
+# Example Cache Data --------------------------------------------------------
 
-# Clean up
-unlink(test_data_path)
-unlink(cache_path("this_yr"))
+# Example cache to be used in tests and examples
+
+# Ensure your data is up-to-date before proceeding!
+renmods_update(types = "all")
+
+create_example_cache()

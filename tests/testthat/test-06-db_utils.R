@@ -1,5 +1,5 @@
 test_that("db_fmt_times()", {
-  skip_if_no_cache()
+  op <- use_example_cache() # Use example cache in temp folder
 
   # Check a random sample of 50 dates per timezone
 
@@ -21,4 +21,7 @@ test_that("db_fmt_times()", {
     suppressMessages()
 
   expect_equal(tz$time, tz$lubridate)
+
+  # Clean up
+  options(op) # Reset cache location
 })

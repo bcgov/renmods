@@ -47,7 +47,10 @@
 #'   functions to filter/select, then `collect()` to load into R memory.
 #'
 #' @export
-#' @examplesIf interactive()
+#' @examples
+#' \dontshow{op <- renmods:::example_cache()}
+#'
+#'
 #' # All data
 #' db <- renmods_connect()
 #'
@@ -87,6 +90,8 @@
 #'
 #' # Remember to shut down the connection when you're done
 #' renmods_disconnect(db)
+#'
+#' \dontshow{options(op)}
 
 renmods_connect <- function(
   dates = NULL,

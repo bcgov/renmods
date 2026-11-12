@@ -4,20 +4,20 @@ test_that("db_connect() creates a DuckDB connection with extensions", {
   skip_on_local()
   expect_message(con <- db_connect(), "Installing DuckDB extension")
   expect_s4_class(con, "duckdb_connection")
-  DBI::dbDisconnect(con)
+  DBI::dbDisconnect(con) # Clean up
 })
 
 test_that("db_connect() creates a DuckDB connection - Local only", {
   skip_on_ci() # Local install expect no messages
   testthat::capture_messages(con <- db_connect())
   expect_s4_class(con, "duckdb_connection")
-  DBI::dbDisconnect(con)
+  DBI::dbDisconnect(con) # Clean up
 })
 
 test_that("db_connect() creates a DuckDB connection", {
   expect_message(con <- db_connect(), "duckdb is storing downloaded")
   expect_s4_class(con, "duckdb_connection")
-  DBI::dbDisconnect(con)
+  DBI::dbDisconnect(con) # Clean up
 })
 
 test_that("db_connect() has httpfs extension available", {
@@ -30,6 +30,7 @@ test_that("db_connect() has httpfs extension available", {
   )
   expect_true("httpfs" %in% exts$extension_name)
 
+  # Clean up
   DBI::dbDisconnect(con)
 })
 
@@ -43,7 +44,7 @@ test_that("renmods_connect() requires cached data", {
 })
 
 test_that("renmods_connect() & renmods_disconnect()", {
-  skip_if_no_cache()
+  op <- use_example_cache() # Use example cache in temp folder
 
   expect_message(tbl <- renmods_connect(types = "historic"), "Connecting to") |>
     expect_message("Last downloaded")
@@ -58,32 +59,42 @@ test_that("renmods_connect() & renmods_disconnect()", {
   # Closes down the connection
   expect_silent(renmods_disconnect(tbl))
   expect_warning(renmods_disconnect(tbl), "Connection already closed")
+
+  # Clean up
+  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() filters by date range", {
-  skip_if_no_cache()
+  op <- use_example_cache() # Use example cache in temp folder
 
-  dates <- c("2010-01-01", "2010-01-31")
+  dates <- c("2010-01-01", "2017-12-31")
   expect_message(tbl <- renmods_connect(dates = dates)) |> suppressMessages()
   expect_s3_class(tbl, "tbl_duckdb_connection")
   expect_rows(tbl)
+  dts <- collect(tbl) |> dplyr::pull(ren_date)
+  expect_gte(min(dts), dates[1])
+  expect_lte(min(dts), dates[2])
 
+  # Clean up
   renmods_disconnect(tbl)
+  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() works with specific types", {
-  skip_if_no_type("this_yr")
+  op <- use_example_cache() # Use example cache in temp folder
 
   expect_message(tbl <- renmods_connect(types = "this_yr")) |>
     suppressMessages()
   expect_s3_class(tbl, "tbl_duckdb_connection")
   expect_rows(tbl)
 
+  # Clean up
   renmods_disconnect(tbl)
+  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() works with multiple types", {
-  skip_if_no_cache()
+  op <- use_example_cache() # Use example cache in temp folder
 
   # Check at least two types exist
   status <- cache_status()
@@ -102,15 +113,19 @@ test_that("renmods_connect() works with multiple types", {
   expect_s3_class(tbl, "tbl_duckdb_connection")
   expect_rows(tbl)
 
+  # Clean up
   renmods_disconnect(tbl)
+  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() works with 'all' types", {
-  skip_if_no_cache()
+  op <- use_example_cache() # Use example cache in temp folder
 
   expect_message(tbl <- renmods_connect(types = "all")) |> suppressMessages()
   expect_s3_class(tbl, "tbl_duckdb_connection")
   expect_rows(tbl)
 
+  # Clean up
   renmods_disconnect(tbl)
+  options(op) # Reset cache location
 })
