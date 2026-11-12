@@ -1,6 +1,6 @@
 # Test extract_date_range() -----------------------------------------------------
 test_that("extract_date_range()", {
-  f <- test_path("fixtures", "this_year.csv.gz")
+  f <- test_path("fixtures", "this_yr.csv.gz")
   expect_silent(r <- extract_date_range(f))
   expect_type(r, "character")
   expect_equal(r, "2025-01-01 to 2026-11-07")

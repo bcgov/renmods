@@ -123,9 +123,9 @@ renmods_connect <- function(
     datasets <- renmods()$datasets
   }
 
-  if (!tz_disp %in% OlsonNames()) {
+  if (length(tz_disp) != 1 || !tz_disp %in% OlsonNames()) {
     cli_abort(
-      "{.arg tz_disp} must be a valid timezone from {.fun OlsonNames}",
+      "{.arg tz_disp} must be a single valid timezone from {.fun OlsonNames}",
       call = NULL
     )
   }
