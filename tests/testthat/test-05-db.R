@@ -1,8 +1,8 @@
 # Test db_connect() ------------------------------------------------------------
 test_that("db_connect() creates a DuckDB connection with extensions", {
-  # Local installs expected to already have extension, but CI will not
-  skip_on_local()
-  expect_message(con <- db_connect(), "Installing DuckDB extension")
+  withr::local_options(duckdb.home = withr::local_tempdir())
+  expect_message(con <- db_connect(), "Installing DuckDB extension 'httpfs'") |>
+    expect_message("Installing DuckDB extension 'icu'")
   expect_s4_class(con, "duckdb_connection")
   DBI::dbDisconnect(con) # Clean up
 })
