@@ -11,7 +11,7 @@
 #' @references
 #' - https://www.rfc-editor.org/rfc/rfc1952.html#page-5
 #' - https://en.wikipedia.org/wiki/Gzip#File_structure
-#' @export
+#' @noRd
 #' @examplesIf interactive()
 #' extract_date_range(cache_path("this_yr"))
 #' extract_date_range(cache_path("yr_2_5"))
