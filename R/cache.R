@@ -74,6 +74,10 @@ cache_dir <- function(check_only = FALSE) {
 #' cache_path(c("this_yr", "yr_2_5"), ext = "parquet")
 
 cache_path <- function(types, ext = "csv.gz") {
+  if (length(types) == 1 && types == "metadata") {
+    return(file.path(cache_dir(), "metadata.csv"))
+  }
+
   types <- check_types(types)
   path <- file.path(cache_dir(), paste0(types, ".", ext))
   path

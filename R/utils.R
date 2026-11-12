@@ -198,7 +198,7 @@ ask <- function(msg, no_ask = NULL, call = rlang::caller_env()) {
 #' read_meta()
 
 read_meta <- function() {
-  path <- file.path(cache_dir(), "metadata.csv")
+  path <- cache_path("metadata")
 
   if (file.exists(path)) {
     # Check if any files are missing and reset if so.
@@ -226,7 +226,7 @@ read_meta <- function() {
 #'
 #' @noRd
 write_meta <- function(meta) {
-  path <- file.path(cache_dir(), "metadata.csv")
+  path <- cache_path("metadata")
   utils::write.csv(meta, path, row.names = FALSE)
 }
 
