@@ -15,13 +15,13 @@ test_that("db_connect() creates a DuckDB connection - Local only", {
 })
 
 test_that("db_connect() creates a DuckDB connection", {
-  expect_message(con <- db_connect(), "duckdb is storing downloaded")
+  expect_message(con <- db_connect(), "duckdb (is storing|keeps) downloaded")
   expect_s4_class(con, "duckdb_connection")
   DBI::dbDisconnect(con) # Clean up
 })
 
 test_that("db_connect() has httpfs extension available", {
-  expect_message(con <- db_connect(), "duckdb is storing downloaded")
+  expect_message(con <- db_connect(), "duckdb (is storing|keeps) downloaded")
 
   # Check httpfs is loaded
   exts <- DBI::dbGetQuery(
