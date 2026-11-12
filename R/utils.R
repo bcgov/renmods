@@ -206,6 +206,16 @@ read_meta <- function() {
       lapply(as.character) |>
       dplyr::as_tibble()
 
+    if (
+      !names(meta) %in%
+        c("dataset", "last_downloaded", "date_range", "renmods_version", "path")
+    ) {
+      cli_abort(
+        "Metadata isn't as expected. Try clearing the cache with {.fun cache_remove} and then {.fun renmods_update} your data.",
+        call = NULL
+      )
+    }
+
     if (!all(is.na(meta$path))) {
       p <- meta$path
       p[is.na(p)] <- ""
