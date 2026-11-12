@@ -16,8 +16,8 @@ renmods_disconnect(tbl)
 Disconnect from the database
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{op <- renmods:::example_cache()}
 db <- renmods_connect()
 renmods_disconnect(db)
-\dontshow{\}) # examplesIf}
+\dontshow{options(op)}
 }

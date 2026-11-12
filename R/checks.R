@@ -124,7 +124,7 @@ check_cache <- function(dataset, force = FALSE) {
 #'
 #' Internal function to determine if cached needs updating.
 #'
-#' @param dataset Character. Datasets to check.
+#' @param dataset Character. Dataset to check.
 #'
 #' @returns Logical. `TRUE` if data needs updating, `FALSE` otherwise.
 #'

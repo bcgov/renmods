@@ -13,8 +13,6 @@
 # the License.
 
 #' @keywords internal
-"_PACKAGE"
-
 #' @section Package options:
 #'
 #' The following options control package behavior:
@@ -43,6 +41,8 @@
 #'   \item{\code{yr_5_10}}{Data from 5-10 years ago (updates every 26 weeks)}
 #'   \item{\code{historic}}{Data older than 10 years (updates every 26 weeks)}
 #' }
+"_PACKAGE"
+
 
 ## usethis namespace: start
 #' @importFrom cli cli_abort

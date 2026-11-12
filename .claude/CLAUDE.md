@@ -41,10 +41,10 @@ Rscript -e 'devtools::build_readme()'  # README.md is generated from README.Rmd
   version? age vs `renmods()$update`) → `renmods_update_()` (httr2 download) →
   `cache_meta(update = TRUE)` writes `metadata.csv` in the cache dir.
 - `cache_meta(reset = TRUE)` is called *before* a download so an interrupted
-  download leaves the type marked missing; `read_meta()` also blanks rows whose
-  files have disappeared.
-- Date ranges per type come from the original filename embedded in the gzip
-  header (`extract_date_range()`); `which_data_types()` uses these to pick which
+  download leaves the dataset marked missing; `read_meta()` also blanks rows
+  whose files have disappeared.
+- Date ranges per dataset come from the original filename embedded in the gzip
+  header (`extract_date_range()`); `which_datasets()` uses these to pick which
   files `renmods_connect(dates = ...)` reads.
 - `renmods_connect()` builds a DuckDB `read_csv([...], union_by_name = true)`
   table function, adds `ren_date`, filters by date, then `db_fmt_times()`
@@ -53,7 +53,7 @@ Rscript -e 'devtools::build_readme()'  # README.md is generated from README.Rmd
   in `ren_tz`.
 - Cache dir is `getOption("renmods.cache_dir")`, defaulting to
   `tools::R_user_dir("renmods", "data")` (not `"cache"`).
-- Adding/changing a data type means editing both the `renmods.urls` option and
+- Adding/changing a dataset means editing both the `renmods.urls` option and
   `renmods()` in `R/zzz.R`.
 
 ## Testing
@@ -63,9 +63,9 @@ Rscript -e 'devtools::build_readme()'  # README.md is generated from README.Rmd
   mock with `local_mocked_bindings()` (e.g. `renmods_update_`, `check_cache`).
 - `R/test-utils.R` defines `file.exists <- NULL` so base `file.exists()` can be
   mocked; keep it. Test helpers go in `R/test-utils.R`, not `helper.R`.
-- Tests needing real cached data use `skip_if_no_cache()` / `skip_if_no_type()`;
-  they only run locally. Confirm with the developer before running anything that
-  hits the EnMoDs/COMS API.
+- Tests needing real cached data use `skip_if_no_cache()` /
+  `skip_if_no_dataset()`; they only run locally. Confirm with the developer
+  before running anything that hits the EnMoDs/COMS API.
 - `ask()` always returns `TRUE` in tests (non-interactive), so prompts proceed.
 - Test style: start with `expect_silent()` or `expect_message()`; prefer
   `expect_silent()` over `expect_invisible()`; use

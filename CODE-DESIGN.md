@@ -11,9 +11,9 @@
   non-interactive session.
 - The `ask()` function also uses `rlang::is_interactive()` which works better
   with testthat (always assumes 'FALSE' in tests)
-- Current data types are: `this_yr`, `yr_2_5`, `yr_5_10`, `historic`
-  - If these change, modify `zzz.R` - `renmods.urls` option and types in
-    `renmods()$types`
+- Current datasets are: `this_yr`, `yr_2_5`, `yr_5_10`, `historic`
+  - If these change, modify `zzz.R` - `renmods.urls` option and datasets in
+    `renmods()$datasets`
 
 ## Future ideas
 
@@ -65,14 +65,14 @@ There are also a family of `cache_xxx()` functions for controlling the cache.
 - Options are set in `zzz.R` via `.onLoad()`
 - Options include:
   - `renmods.cache_dir`: Where to store downloaded data (defaults to `NULL`)
-  - `renmods.urls`: URLs for four data types
+  - `renmods.urls`: URLs for four datasets
 - Options are only set if they aren't already present
 
 ## Internal data via functions (`zzz.R`)
 
 - `renmods()` is an internal function (in `zzz.R`) that lists
-  - Data types available ('this_yr', 'yr_2_5', 'yr_5_10', 'historic')
-  - Update intervals (in weeks) for each type
+  - Datasets available ('this_yr', 'yr_2_5', 'yr_5_10', 'historic')
+  - Update intervals (in weeks) for each dataset
 - This could be a data set, but I don't think it needs to be
 
 ## Cache (`cache.R`)
@@ -105,9 +105,9 @@ There are also a family of `cache_xxx()` functions for controlling the cache.
 ## Database (`db.R`)
 
 - `renmods_connect()` combines and connects to all data by default
-- Users can supply a date range or the data type they wish to connect to
-- For a date range, we check the metadata and pick only the data types needed,
-  then we prefilter the data by date.
+- Users can supply a date range or the dataset they wish to connect to
+- For a date range, we check the metadata and pick only the dataset needed, then
+  we prefilter the data by date.
 - `collect()` is exported from dplyr (`re-exports.R`) so that users don't have
   to use dplyr just to get the data.
 
