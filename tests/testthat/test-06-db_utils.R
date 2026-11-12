@@ -1,9 +1,10 @@
 test_that("db_fmt_times()", {
-  skip_if_no_cache()
+  op <- use_example_cache() # Use example cache in temp folder
+  withr::defer(options(op))
 
   # Check a random sample of 50 dates per timezone
 
-  tz <- renmods_connect(types = "all", convert_times = FALSE) |>
+  tz <- renmods_connect(datasets = "all", convert_times = FALSE) |>
     dplyr::mutate(
       tz = !!sql_get_tz("Observed_Date_Time"),
       time = !!sql_get_time("Observed_Date_Time")

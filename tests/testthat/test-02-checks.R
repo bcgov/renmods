@@ -1,13 +1,13 @@
-# Test check_types() ----------------------------------------------------------
+# Test check_datasets() ----------------------------------------------------------
 
-test_that("check_types() works with valid types", {
-  expect_silent(check_types("this_yr"))
-  expect_silent(check_types(c("this_yr", "yr_2_5")))
-  expect_silent(check_types("all"))
+test_that("check_datasets() works with valid datasets", {
+  expect_silent(check_datasets("this_yr"))
+  expect_silent(check_datasets(c("this_yr", "yr_2_5")))
+  expect_silent(check_datasets("all"))
 })
 
-test_that("check_types() returns all types when 'all'", {
-  result <- check_types("all")
+test_that("check_datasets() returns all datasets when 'all'", {
+  result <- check_datasets("all")
   expect_named(
     setNames(result, result),
     c("this_yr", "yr_2_5", "yr_5_10", "historic"),
@@ -15,9 +15,12 @@ test_that("check_types() returns all types when 'all'", {
   )
 })
 
-test_that("check_types() errors with invalid types", {
-  expect_error(check_types("invalid"), "Type must be one of")
-  expect_error(check_types(c("this_yr", "invalid")), "Type must be one of")
+test_that("check_datasets() errors with invalid datasets", {
+  expect_error(check_datasets("invalid"), "`datasets` must be one of")
+  expect_error(
+    check_datasets(c("this_yr", "invalid")),
+    "`datasets` must be one of"
+  )
 })
 
 

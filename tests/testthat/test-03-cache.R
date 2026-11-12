@@ -22,19 +22,19 @@ test_that("cache_path() returns correct file paths", {
   expect_true(stringr::str_detect(result, stringr::fixed(cache_dir())))
 })
 
-test_that("cache_path() works with multiple types", {
+test_that("cache_path() works with multiple datasets", {
   expect_silent(result <- cache_path(c("this_yr", "yr_2_5")))
   expect_length(result, 2)
   expect_match(result[1], "this_yr\\.csv\\.gz$")
   expect_match(result[2], "yr_2_5\\.csv\\.gz$")
 })
 
-test_that("cache_path() expands 'all' to all types", {
+test_that("cache_path() expands 'all' to all datasets", {
   expect_silent(result <- cache_path("all"))
-  expect_length(result, length(renmods()$type))
+  expect_length(result, length(renmods()$datasets))
   expect_true(all(stringr::str_detect(
     result,
-    paste0(renmods()$type, "\\.csv\\.gz$")
+    paste0(renmods()$datasets, "\\.csv\\.gz$")
   )))
 })
 
@@ -49,7 +49,7 @@ test_that("cache_status()", {
   expect_s3_class(result, "data.frame")
   expect_named(
     result,
-    c("type", "last_downloaded", "date_range", "renmods_version", "path"),
+    c("dataset", "last_downloaded", "date_range", "renmods_version", "path"),
     ignore.order = TRUE
   )
 })

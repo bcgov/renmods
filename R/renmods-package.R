@@ -13,8 +13,6 @@
 # the License.
 
 #' @keywords internal
-"_PACKAGE"
-
 #' @section Package options:
 #'
 #' The following options control package behavior:
@@ -23,7 +21,7 @@
 #'   \item{\code{renmods.cache_dir}}{Directory for caching downloaded data.
 #'     Default: \code{NULL} (uses \code{tools::R_user_dir("renmods", "cache")}).
 #'     Set to a custom path to override default location.}
-#'   \item{\code{renmods.urls}}{Named list of URLs for ENMODS data sources.
+#'   \item{\code{renmods.urls}}{Named list of URLs for EnMoDS data sources.
 #'     Contains: \code{this_yr}, \code{yr_2_5}, \code{yr_5_10}, and
 #'     \code{historic}. URLs are provided by default but can be overridden.}
 #' }
@@ -33,9 +31,9 @@
 #' options(renmods.cache_dir = "~/.renmods_cache")
 #' }
 #'
-#' @section Data types:
+#' @section Datasets:
 #'
-#' The package provides access to four data types covering different time periods:
+#' The package provides access to four EnMoDS datasets covering different time periods:
 #'
 #' \describe{
 #'   \item{\code{this_yr}}{Current year data (updates weekly)}
@@ -43,6 +41,8 @@
 #'   \item{\code{yr_5_10}}{Data from 5-10 years ago (updates every 26 weeks)}
 #'   \item{\code{historic}}{Data older than 10 years (updates every 26 weeks)}
 #' }
+"_PACKAGE"
+
 
 ## usethis namespace: start
 #' @importFrom cli cli_abort
@@ -50,10 +50,12 @@
 #' @importFrom cli cli_alert_info
 #' @importFrom cli cli_alert_success
 #' @importFrom cli cli_alert_warning
+#' @importFrom cli cli_h2
 #' @importFrom cli cli_inform
 #' @importFrom cli cli_par
 #' @importFrom cli cli_ul
 #' @importFrom cli cli_warn
+#' @importFrom rlang :=
 #' @importFrom rlang .data
 #' @importFrom rlang .env
 ## usethis namespace: end
