@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  error = TRUE
 )
 ```
 
@@ -26,7 +27,7 @@ Download/update the data and save to your cache.
 
 ```{r}
 #| eval: false
-renmods_update(type = "all")
+renmods_update(datasets = "all")
 ```
 
 
@@ -36,10 +37,10 @@ Connect to the database EnMoDS table
 db <- renmods_connect()
 ```
 
-Optionally, prefilter by data type or date range.
+Optionally, prefilter by dataset or date range.
 
 ```{r}
-db <- renmods_connect(type = "this_yr")
+db <- renmods_connect(datasets = "this_yr")
 db <- renmods_connect(dates = c("2024-12-15", "2025-01-15"))
 db <- renmods_connect(dates = c("2026-01-01", "2026-01-31"))
 ```
@@ -48,7 +49,9 @@ db <- renmods_connect(dates = c("2026-01-01", "2026-01-31"))
 ## Collecting data into memory
 
 Collect the data into a data frame (from a database connection) for working/saving.
-The smaller the data set and the fewer data types, the fast this will go.
+The smaller the data set and the fewer datasets, the faster this will go.
+However, because we use Parquet files to store the data, this is pretty fast to
+start.
 
 ```{r}
 df <- collect(db)
@@ -175,6 +178,22 @@ df <- renmods_connect(
 # Note columns are character now
 select(df, contains("Time"))
 ```
+
+## Different Result Types
+
+By default, renmods returns only observations with a Numeric result value. 
+However, you can return non-numeric values with the `result_type` argument.
+
+```{r}
+df <- renmods_connect(result_type = "non-numeric") |>
+  filter(Location_ID == "DS8802967") |>
+  collect()
+df |> select(Observed_Property_ID, Result_Value, Observed_Property_Result_Type)
+```
+
+You can also return *both* numeric and non-numeric result values with `result_type = 'all'`, but we advise against that as the `Result_Value` column will be a character (text) column, so even numeric values will be considered. 
+If you need both, we recommend collecting each separately, and then combining them in a way that makes sense for your work.
+
 
 ## Disconnecting
 
