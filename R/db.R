@@ -55,12 +55,15 @@
 #' # All data
 #' db <- renmods_connect()
 #'
+#' # Use dplyr to filter and manipulate the data
+#' library(dplyr)
+#'
 #' # Filter and collect into a data frame
 #' df <- renmods_connect() |>
-#'   dplyr::filter(Location_ID %in% c("E327371", "E300230")) |>
+#'   filter(Location_ID %in% c("E327371", "E300230")) |>
 #'   collect()
 #'
-#' # Connect only to data types required for a specific date range
+#' # Automatically connects only to datasets required for a specific date range
 #' db <- renmods_connect(dates = c("2025-01-01", "2025-02-01"))
 #' db <- renmods_connect(dates = c("1990-01-01", "1990-02-01"))
 #'
@@ -229,9 +232,11 @@ db_connect <- function(tz_disp = "Etc/GMT+7") {
 #' @returns `NULL` invisibly. Called for side effect of disconnecting database.
 #'
 #' @export
-#' @examplesIf interactive()
+#' @examples
+#' \dontshow{op <- renmods:::example_cache()}
 #' db <- renmods_connect()
 #' renmods_disconnect(db)
+#' \dontshow{options(op)}
 
 renmods_disconnect <- function(tbl) {
   if (!inherits(tbl, "tbl_duckdb_connection")) {
