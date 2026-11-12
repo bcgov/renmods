@@ -207,8 +207,16 @@ read_meta <- function() {
       dplyr::as_tibble()
 
     if (
-      !names(meta) %in%
-        c("dataset", "last_downloaded", "date_range", "renmods_version", "path")
+      !setequal(
+        names(meta),
+        c(
+          "dataset",
+          "last_downloaded",
+          "date_range",
+          "renmods_version",
+          "path"
+        )
+      )
     ) {
       cli_abort(
         "Metadata isn't as expected. Try clearing the cache with {.fun cache_remove} and then {.fun renmods_update} your data.",
