@@ -60,8 +60,16 @@
 #' db <- renmods_connect(dates = c("2025-01-01", "2025-02-01"))
 #' db <- renmods_connect(dates = c("1990-01-01", "1990-02-01"))
 #'
-#' # Use dplyr to manipulate the data
-#' library(dplyr)
+#' # By default, only returns data where Observed_Property_Result_Type is NUMERIC
+#' # But you can specify non-numeric data
+#' db <- renmods_connect(result_type = "non-numeric")
+#' select(db, "Observed_Property_ID", "Result_Value")
+#'
+#' # Or even *all* data
+#' # Note: This will result in a mix of numeric and non-numeric and
+#' #  Result_Value will be "character"
+#' db <- renmods_connect(result_type = "all")
+#' select(db, "Observed_Property_ID", "Result_Value")
 #'
 #' # Explore the data and column names
 #' colnames(db)
@@ -83,6 +91,7 @@
 renmods_connect <- function(
   dates = NULL,
   types = "all",
+  result_type = "numeric",
   convert_times = TRUE,
   tz_disp = "Etc/GMT+7"
 ) {
@@ -93,6 +102,18 @@ renmods_connect <- function(
     types <- check_types(types)
   } else {
     types <- renmods()$types
+  }
+
+  if (
+    is.null(result_type) ||
+      !is.character(result_type) ||
+      length(result_type) > 1 ||
+      !result_type %in% c("numeric", "non-numeric", "all")
+  ) {
+    cli_abort(
+      "{.arg result_type} must be one of 'numeric', 'non-numeric', or 'all'",
+      call = NULL
+    )
   }
 
   # Check cache exists
@@ -140,6 +161,20 @@ renmods_connect <- function(
   # Fix all date/times
   if (convert_times) {
     tbl <- db_fmt_times(tbl)
+  }
+
+  # Filter & convert by result_type
+  if (result_type == "numeric") {
+    tbl <- tbl |>
+      dplyr::filter(.data$Observed_Property_Result_Type == "NUMERIC") |>
+      dplyr::mutate(Result_Value = as.numeric(.data$Result_Value))
+  } else if (result_type == "non-numeric") {
+    tbl <- dplyr::filter(tbl, .data$Observed_Property_Result_Type != "NUMERIC")
+  } else if (result_type == "all") {
+    cli_warn(
+      "Using {.arg result_type = 'all'} means that 'Result_Values' may be a combination of numeric, categorical, and/or character values",
+      call = NULL
+    )
   }
 
   tbl
