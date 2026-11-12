@@ -153,8 +153,11 @@ create_example_cache <- function(
   # Create the example parquet files
   purrr::walk(datasets, \(d) example_data(dataset = d, n = n, n_max = n_max))
 
-  # Create the example metadata files
-  file.copy(cache_path("metadata"), dir)
+  # Create the example metadata file
+  # use_example_cache() fills in the full path at run time
+  cache_meta(datasets = datasets) |>
+    dplyr::mutate(path = basename(.data$path)) |>
+    utils::write.csv(file.path(dir, "metadata.csv"), row.names = FALSE)
 }
 
 create_example_download_file <- function(
