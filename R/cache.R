@@ -160,6 +160,11 @@ cache_meta <- function(types = renmods()$types, update = FALSE, reset = FALSE) {
 #' @examples
 #' # View status of all cached data
 #' cache_status()
+#'
+#' # After download
+#' \dontshow{op <- renmods:::example_cache()}
+#' cache_status()
+#' \dontshow{options(op)}
 
 cache_status <- function() {
   if (cache_dir(check_only = TRUE)) {
