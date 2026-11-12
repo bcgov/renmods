@@ -37,6 +37,10 @@
 #' @param datasets Character. Datasets to connect to. One or more of
 #'   "this_yr", "yr_2_5", "yr_5_10", "historic", or "all" (default "all").
 #'   Ignored if `dates` is specified.
+#' @param result_type Character. Which types of results to return, "numeric"
+#'   (default), "non-numeric", or "all" (not recommended). If "numeric",
+#'   `Result_Value` is converted to numeric, otherwise left as character. Result
+#'   types are based on the value of `Observed_Property_Result_Type`.
 #' @param convert_times Logical. Whether or not to convert character date/times
 #'   to date/time format in R. Defaults to `TRUE`. If `FALSE` remain as
 #'   character.

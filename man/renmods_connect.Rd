@@ -22,6 +22,11 @@ filtering data ("YYYY-MM-DD"). Note that data is filtered by the
 "this_yr", "yr_2_5", "yr_5_10", "historic", or "all" (default "all").
 Ignored if \code{dates} is specified.}
 
+\item{result_type}{Character. Which types of results to return, "numeric"
+(default), "non-numeric", or "all" (not recommended). If "numeric",
+\code{Result_Value} is converted to numeric, otherwise left as character. Result
+types are based on the value of \code{Observed_Property_Result_Type}.}
+
 \item{convert_times}{Logical. Whether or not to convert character date/times
 to date/time format in R. Defaults to \code{TRUE}. If \code{FALSE} remain as
 character.}

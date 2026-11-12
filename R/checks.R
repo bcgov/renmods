@@ -240,5 +240,5 @@ check_db_icu <- function(con) {
 
 check_version <- function(dataset) {
   v <- cache_meta(datasets = dataset)$renmods_version
-  v >= packageVersion("renmods")
+  v >= utils::packageVersion("renmods")
 }

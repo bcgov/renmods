@@ -160,7 +160,7 @@ create_example_download_file <- function(
 ) {
   download_csv(dataset, internal = TRUE)
 
-  test_data_path <- file.path(where, data_example)
+  test_data_path <- file.path(where, date_example)
   lines <- readLines(gzfile(cache_path(dataset)), n = 5)
   writeLines(lines, test_data_path)
   system2(
