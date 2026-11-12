@@ -30,24 +30,24 @@
 
 #' Get package constants
 #'
-#' Returns a list of package-level constants including data types and
+#' Returns a list of package-level constants including dataset names and
 #' update intervals.
 #'
 #' @returns Named list with:
-#' - `types`: Character vector of data types
+#' - `datasets`: Character vector of dataset names
 #' - `update`: Named numeric vector of update intervals in weeks
 #'
 #' @noRd
 #' @examples
 #' renmods()
-#' renmods()$types
+#' renmods()$datasets
 #' renmods()$update
 
 renmods <- function() {
-  types <- c("this_yr", "yr_2_5", "yr_5_10", "historic")
+  datasets <- c("this_yr", "yr_2_5", "yr_5_10", "historic")
 
   update <- c(1, 26, 26, 26) |> # Weeks!
-    stats::setNames(types)
+    stats::setNames(datasets)
 
-  list(types = types, update = update)
+  list(datasets = datasets, update = update)
 }

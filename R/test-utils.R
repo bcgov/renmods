@@ -30,32 +30,32 @@ skip_if_no_cache <- function() {
   }
 }
 
-#' Skip test if specific data type not cached
+#' Skip test if specific dataset not cached
 #'
-#' Checks for cached data of a specific type. Skips test if not available.
+#' Checks for cached dataset. Skips test if not available.
 #' This is a test helper function for use in testthat tests.
 #'
-#' @param type Character. Data type to check for.
+#' @param dataset Character. Dataset to check for.
 #'
 #' @returns `NULL`. Called for side effect of skipping tests.
 #'
 #' @noRd
 #' @examples
 #' test_that("function works with this_yr data", {
-#'   skip_if_no_type("this_yr")
+#'   skip_if_no_dataset("this_yr")
 #'   # test code here
 #' })
 
-skip_if_no_type <- function(type) {
+skip_if_no_dataset <- function(dataset) {
   skip_if_no_cache()
 
-  path <- cache_path(type)
+  path <- cache_path(dataset)
   if (!file.exists(path)) {
     testthat::skip(paste0(
-      "No cached data for type '",
-      type,
+      "No cached data for dataset '",
+      dataset,
       "'. Run renmods_update('",
-      type,
+      dataset,
       "')"
     ))
   }

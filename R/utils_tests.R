@@ -39,7 +39,7 @@ use_example_cache <- function() {
   # we recreate the example cache data.
   meta <- utils::read.csv(cache_path("metadata")) |>
     dplyr::mutate(
-      path = cache_path(.data$type, "parquet"),
+      path = cache_path(.data$dataset, "parquet"),
       last_downloaded = as.character(round(Sys.time()))
     )
   write_meta(meta)
@@ -49,7 +49,7 @@ use_example_cache <- function() {
 
 #' Create example data parquet files
 #'
-#' @param type Character. "this_yr", "yr_2_5", "yr_5_10", or "historic"
+#' @param dataset Character. "this_yr", "yr_2_5", "yr_5_10", or "historic"
 #' @param n Numeric. Samples per location
 #' @param n_max Numeric. Maximum number of samples total. Example data is
 #' truncated to this.
@@ -59,7 +59,7 @@ use_example_cache <- function() {
 #'
 #' @noRd
 example_data <- function(
-  type,
+  dataset,
   dir = "inst/extdata/example_cache",
   n = 50,
   n_max = 200
@@ -81,7 +81,7 @@ example_data <- function(
   )
 
   df <- renmods_connect(
-    types = type,
+    datasets = dataset,
     result_type = "all",
     convert_times = FALSE
   ) |>
@@ -110,7 +110,7 @@ example_data <- function(
     paste0(
       "COPY (SELECT * FROM example ORDER BY Location_ID, ren_date) ",
       "TO '",
-      file.path(dir, paste0(type, ".parquet")),
+      file.path(dir, paste0(dataset, ".parquet")),
       "' ",
       "(FORMAT parquet, COMPRESSION zstd)"
     )
@@ -123,7 +123,7 @@ example_data <- function(
 #' Used by data-raw/test_data.R to create example cache parquet files and
 #' metadata.csv.
 #'
-#' @param types Example data type names
+#' @param datasets Example datasets to create
 #' @param dir Location of the example cache
 #' @param n Number of samples per location id to include
 #' @param n_max Total number of samples to include
@@ -133,7 +133,7 @@ example_data <- function(
 #' @noRd
 
 create_example_cache <- function(
-  types = renmods()$types,
+  datasets = renmods()$datasets,
   dir = "inst/extdata/example_cache",
   n = 50,
   n_max = 200
@@ -147,29 +147,29 @@ create_example_cache <- function(
   set.seed(111)
 
   # Create the example parquet files
-  purrr::walk(types, \(t) example_data(type = t, n = n, n_max = n_max))
+  purrr::walk(datasets, \(d) example_data(dataset = d, n = n, n_max = n_max))
 
   # Create the example metadata files
   file.copy(cache_path("metadata"), dir)
 }
 
 create_example_download_file <- function(
-  type = "this_yr",
+  dataset = "this_yr",
   date_example = "20250101_to_20261107.csv",
   where = testthat::test_path("fixtures")
 ) {
-  download_csv(type, internal = TRUE)
+  download_csv(dataset, internal = TRUE)
 
   test_data_path <- file.path(where, data_example)
-  lines <- readLines(gzfile(cache_path(type)), n = 5)
+  lines <- readLines(gzfile(cache_path(dataset)), n = 5)
   writeLines(lines, test_data_path)
   system2(
     "gzip",
     c("-c", test_data_path),
-    stdout = file.path(where, paste0(type, ".csv.gz"))
+    stdout = file.path(where, paste0(dataset, ".csv.gz"))
   )
 
   # Clean up
   unlink(test_data_path) # Remove uncompressed csv
-  unlink(cache_path(type)) # Remove original download file
+  unlink(cache_path(dataset)) # Remove original download file
 }

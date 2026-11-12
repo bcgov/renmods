@@ -17,12 +17,13 @@
 #' Downloads EnMoDS data from BC Gov and saves to the local cache.
 #' By default, only missing or outdated data is downloaded.
 #'
-#' @param types Character. Which data types to update. One or more of
+#' @param datasets Character. Which datasets to update. One or more of
 #'   "this_yr", "yr_2_5", "yr_5_10", "historic", or "all" (default "this_yr").
 #' @param force Logical. If `TRUE`, downloads data even if cache is up-to-date
 #'   (default `FALSE`).
 #' @param cleanup Logical. Whether to remove the downloaded `csv.gz` file(s)
 #'   after conversion to parquet. Defaults to TRUE.
+#' @param types Character. Deprecated, use `datasets` instead.
 #'
 #' @returns `NULL` invisibly. Called for side effect of downloading data.
 #'
@@ -32,40 +33,52 @@
 #' # Update current year data
 #' renmods_update()
 #'
-#' # Update all data types
+#' # Update all datasets
 #' renmods_update("all")
 #'
-#' # Force update of specific types
+#' # Force update of specific datasets
 #' renmods_update(c("this_yr", "yr_2_5"), force = TRUE)
 #' }
 
-renmods_update <- function(types = "this_yr", force = FALSE, cleanup = TRUE) {
-  types <- check_types(types)
+renmods_update <- function(
+  datasets = "this_yr",
+  force = FALSE,
+  cleanup = TRUE,
+  types = NULL
+) {
+  if (!missing(types)) {
+    cli_alert("{.arg types} has been deprecated, use {.arg dataset} instead")
+    datasets <- types
+  }
+
+  datasets <- check_datasets(datasets)
 
   # Repeat for "all" if requested
-  if (length(types) > 1) {
-    purrr::walk(types, \(t) renmods_update(t, force = force, cleanup = cleanup))
+  if (length(datasets) > 1) {
+    purrr::walk(datasets, \(t) {
+      renmods_update(t, force = force, cleanup = cleanup)
+    })
     return(invisible())
   }
 
-  # Single type from here on
-  type <- types
+  # Single dataset from here on
+  dataset <- datasets
 
-  if (check_cache(type, force)) {
-    renmods_update_(type, cleanup)
+  if (check_cache(dataset, force)) {
+    renmods_update_(dataset, cleanup)
   } else {
     cli_alert_info(
-      "Data '{type}' already present and up-to-date (use `force = TRUE` to update anyway)"
+      "Data '{dataset}' already present and up-to-date (use `force = TRUE` to update anyway)"
     )
   }
 }
 
 #' Internal function to download data
 #'
-#' Downloads a single data type from EnMoDS and updates cache metadata.
+#' Downloads a single dataset from EnMoDS and updates cache metadata.
 #' This is the internal worker function called by `renmods_update()`.
 #'
-#' @param type Character. Single data type to download.
+#' @param dataset Character. Single dataset to download.
 #' @param cleanup Logical. Whether to remove the `csv.gz` file(s) after
 #'   conversion to parquet. Defaults to TRUE.
 #'
@@ -77,19 +90,19 @@ renmods_update <- function(types = "this_yr", force = FALSE, cleanup = TRUE) {
 #'   renmods_update_("this_yr")
 #' }
 
-renmods_update_ <- function(type, cleanup = TRUE) {
+renmods_update_ <- function(dataset, cleanup = TRUE) {
   cli_par()
-  cli_h2("Updating '{type}' data from EnMoDS")
+  cli_h2("Updating '{dataset}' data from EnMoDS")
 
-  download_csv(type)
-  convert_parquet(type)
+  download_csv(dataset)
+  convert_parquet(dataset)
 
   # Record metadata
-  cache_meta(types = type, update = TRUE)
+  cache_meta(datasets = dataset, update = TRUE)
 
   # Finally remove the csv.gz files
   if (cleanup) {
-    s <- file.remove(cache_path(type))
+    s <- file.remove(cache_path(dataset))
     if (s) {
       cli_alert_success("csv.gz file successfull removed")
     } else {
@@ -98,16 +111,16 @@ renmods_update_ <- function(type, cleanup = TRUE) {
   }
 }
 
-download_csv <- function(type, internal = FALSE) {
-  path <- cache_path(type)
-  url <- getOption("renmods.urls")[[type]]
+download_csv <- function(dataset, internal = FALSE) {
+  path <- cache_path(dataset)
+  url <- getOption("renmods.urls")[[dataset]]
 
   cli_alert_info("Downloading csv.gz from EnMoDS")
   cli_alert_success("Saving to cache: {path}")
 
   # Remove file from metadata - In case download aborted, metadata is correct
   if (!internal) {
-    cache_meta(types = type, reset = TRUE)
+    cache_meta(datasets = dataset, reset = TRUE)
   }
 
   httr2::request(url) |>
@@ -117,10 +130,10 @@ download_csv <- function(type, internal = FALSE) {
   cli_alert_success("Successfully downloaded")
 }
 
-convert_parquet <- function(type) {
-  path_csv <- cache_path(type, "csv.gz")
-  path_parquet <- cache_path(type, "parquet")
-  path_parquet_temp <- cache_path(type, "parquet.tmp")
+convert_parquet <- function(dataset) {
+  path_csv <- cache_path(dataset, "csv.gz")
+  path_parquet <- cache_path(dataset, "parquet")
+  path_parquet_temp <- cache_path(dataset, "parquet.tmp")
 
   cli_alert_info("Converting to Parquet: {path_parquet}")
   cli_alert_success("Saving to cache: {path_parquet}")

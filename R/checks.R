@@ -12,39 +12,31 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-#' Validate and normalize data type arguments
+#' Validate and normalize dataset arguments
 #'
-#' Checks that data types are valid and expands "all" to a vector of all data
-#' types.
+#' Checks that datasets are valid and expands "all" to a vector of all datasets.
 #'
-#' @param types Character. Data types to validate.
+#' @param datasets Character. Datasets to validate.
 #'
-#' @returns Character vector. Validated data types.
+#' @returns Character vector. Validated datasets.
 #'
 #' @noRd
 #' @examples
-#' check_types("this_yr")
-#' check_types("all")
-#' check_types(c("this_yr", "yr_2_5"))
+#' check_datasets("this_yr")
+#' check_datasets("all")
+#' check_datasets(c("this_yr", "yr_2_5"))
 
-check_types <- function(types) {
-  t <- renmods()$types
+check_datasets <- function(datasets) {
+  t <- renmods()$datasets
 
-  if (length(types) == 1 && types == "all") {
+  if (length(datasets) == 1 && datasets == "all") {
     return(t)
   }
 
-  if (!all(types %in% t)) {
-    rlang::abort(
-      paste0(
-        "Type must be one of '",
-        paste0(t, collapse = "', '"),
-        "'"
-      ),
-      call = NULL
-    )
+  if (!all(datasets %in% t)) {
+    cli_abort("{.arg datasets} must be one of {t}", call = NULL)
   }
-  types
+  datasets
 }
 
 #' Check date are in correct format
@@ -92,7 +84,7 @@ check_dates <- function(dates, range = FALSE) {
 #' Determines whether cached data needs to be updated based on existence,
 #' age, and force parameter.
 #'
-#' @param type Character. Single data type to check.
+#' @param dataset Character. Single dataset to check.
 #' @param force Logical. If `TRUE`, forces update regardless of cache status.
 #'
 #' @returns Logical. `TRUE` if data should be updated, `FALSE` otherwise.
@@ -102,27 +94,27 @@ check_dates <- function(dates, range = FALSE) {
 #' check_cache("this_yr")
 #' check_cache("this_yr", force = TRUE)
 
-check_cache <- function(type, force = FALSE) {
+check_cache <- function(dataset, force = FALSE) {
   update <- FALSE
 
-  path <- cache_path(type, "parquet")
+  path <- cache_path(dataset, "parquet")
   if (!file.exists(path)) {
     update <- TRUE
   } else if (force) {
     update <- TRUE
     cli_alert_info("Forcing update of cached data")
-  } else if (is.na(check_version(type))) {
+  } else if (is.na(check_version(dataset))) {
     cli_alert_info(
       "Cached data is missing or a download was interrupted and should be updated"
     )
     update <- TRUE
-  } else if (!check_version(type)) {
+  } else if (!check_version(dataset)) {
     cli_alert_warning(
       "Cached data is from an older version of the package and should be updated"
     )
     update <- TRUE
   } else {
-    update <- check_time_to_update(type)
+    update <- check_time_to_update(dataset)
   }
 
   update
@@ -132,32 +124,32 @@ check_cache <- function(type, force = FALSE) {
 #'
 #' Internal function to determine if cached needs updating.
 #'
-#' @param type Character. Data type to check.
+#' @param dataset Character. Datasets to check.
 #'
 #' @returns Logical. `TRUE` if data needs updating, `FALSE` otherwise.
 #'
 #' @noRd
 #' @examples
 #' check_time_to_update("this_yr")
-check_time_to_update <- function(type) {
-  d <- cache_meta(types = type)$last_downloaded
+check_time_to_update <- function(dataset) {
+  d <- cache_meta(datasets = dataset)$last_downloaded
 
   if (is.na(d)) {
     # Always update if no data
     return(TRUE)
   }
 
-  w <- renmods()$update[type]
+  w <- renmods()$update[dataset]
   diff <- difftime(Sys.time(), d, units = "weeks")
-  update <- diff > renmods()$update[type]
+  update <- diff > renmods()$update[dataset]
 
   if (update) {
     update <- ask(
-      "Data '{type}' is older than {w} weeks. Update data?",
-      "Updating '{type}' data"
+      "Data '{dataset}' is older than {w} weeks. Update data?",
+      "Updating '{dataset}' data"
     )
   } else {
-    cli_alert_success("{type}: Last downloaded {d} (within {w} week(s))")
+    cli_alert_success("{dataset}: Last downloaded {d} (within {w} week(s))")
   }
   update
 }
@@ -237,7 +229,7 @@ check_db_icu <- function(con) {
 
 #' Check data version against package version
 #'
-#' @param type Character. Single data type to check.
+#' @param dataset Character. Single dataset to check.
 #'
 #' @returns TRUE if matches, FALSE if data older than package, NA if a download
 #'   was interrupted
@@ -246,7 +238,7 @@ check_db_icu <- function(con) {
 #' @examples
 #' check_version("this_yr")
 
-check_version <- function(type) {
-  v <- cache_meta(types = type)$renmods_version
+check_version <- function(dataset) {
+  v <- cache_meta(datasets = dataset)$renmods_version
   v >= packageVersion("renmods")
 }

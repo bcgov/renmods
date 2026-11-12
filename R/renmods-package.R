@@ -33,9 +33,9 @@
 #' options(renmods.cache_dir = "~/.renmods_cache")
 #' }
 #'
-#' @section Data types:
+#' @section Datasets:
 #'
-#' The package provides access to four data types covering different time periods:
+#' The package provides access to four EnMoDS datasets covering different time periods:
 #'
 #' \describe{
 #'   \item{\code{this_yr}}{Current year data (updates weekly)}

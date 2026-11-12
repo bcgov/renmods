@@ -57,12 +57,12 @@ cache_dir <- function(check_only = FALSE) {
   path
 }
 
-#' Get cache file paths for data types
+#' Get cache file paths for datasets
 #'
 #' Returns the full file paths for where EnMoDS data files would be cached. Note
 #' they do not have to exist.
 #'
-#' @param types Character. Data types to get paths for.
+#' @param datasets Character. Datasets to get paths for.
 #'
 #' @returns Character vector. Full file paths to cached data files.
 #'
@@ -73,13 +73,13 @@ cache_dir <- function(check_only = FALSE) {
 #' cache_path("this_yr", ext = "parquet")
 #' cache_path(c("this_yr", "yr_2_5"), ext = "parquet")
 
-cache_path <- function(types, ext = "csv.gz") {
-  if (length(types) == 1 && types == "metadata") {
+cache_path <- function(datasets, ext = "csv.gz") {
+  if (length(datasets) == 1 && datasets == "metadata") {
     return(file.path(cache_dir(), "metadata.csv"))
   }
 
-  types <- check_types(types)
-  path <- file.path(cache_dir(), paste0(types, ".", ext))
+  datasets <- check_datasets(datasets)
+  path <- file.path(cache_dir(), paste0(datasets, ".", ext))
   path
 }
 
@@ -89,36 +89,40 @@ cache_path <- function(types, ext = "csv.gz") {
 #' the last download dates for the cache. Users should use `cache_status()`
 #' instead.
 #'
-#' @param types Character. Types of EnMoDS data to check.
+#' @param datasets Character. EnMoDS datasets to check.
 #' @param update Logical. Whether or not to update the metadata (assumes data
 #'   has just been downloaded).
-#' @param reset Logical. Whether to reset the metadata for a data type to blank.
+#' @param reset Logical. Whether to reset the metadata for a dataset to blank.
 #'   Useful for just before when downloading, to ensure if the download is
 #'   cancelled, that the metadata correctly records the data status as missing.
 #'
-#' @returns Data frame with cache metadata (type, last_downloaded, date_range,
+#' @returns Data frame with cache metadata (dataset, last_downloaded, date_range,
 #'   renmods_version, path).
 #'
 #' @noRd
 #' @examples
 #' cache_meta()
 
-cache_meta <- function(types = renmods()$types, update = FALSE, reset = FALSE) {
+cache_meta <- function(
+  datasets = renmods()$datasets,
+  update = FALSE,
+  reset = FALSE
+) {
   meta <- read_meta()
 
   if (!update && !reset) {
-    if (!is.null(types)) {
-      meta <- dplyr::filter(meta, .data$type %in% .env$types)
+    if (!is.null(datasets)) {
+      meta <- dplyr::filter(meta, .data$dataset %in% .env$datasets)
     }
     return(meta)
   }
 
   if (update) {
     # Which files do we have (this will be run before csv.gz files are removed)
-    f_csv <- cache_path(types)
+    f_csv <- cache_path(datasets)
     f_csv <- f_csv[file.exists(f_csv)]
 
-    f_parquet <- cache_path(types, "parquet")
+    f_parquet <- cache_path(datasets, "parquet")
     f_parquet <- f_parquet[file.exists(f_parquet)]
 
     dates <- extract_date_range(f_csv)
@@ -126,18 +130,18 @@ cache_meta <- function(types = renmods()$types, update = FALSE, reset = FALSE) {
     meta <- dplyr::rows_upsert(
       meta,
       dplyr::tibble(
-        type = types,
+        dataset = datasets,
         last_downloaded = as.character(round(Sys.time())),
         date_range = dates,
         renmods_version = as.character(utils::packageVersion("renmods")),
         path = f_parquet
       ),
-      by = "type"
+      by = "dataset"
     )
 
     cli_alert_success("Cache metadata updated")
   } else if (reset) {
-    meta <- dplyr::rows_upsert(meta, meta_blank(types), by = "type")
+    meta <- dplyr::rows_upsert(meta, meta_blank(datasets), by = "dataset")
   }
 
   write_meta(meta)
@@ -146,11 +150,11 @@ cache_meta <- function(types = renmods()$types, update = FALSE, reset = FALSE) {
 
 #' View cache status
 #'
-#' Returns information about cached EnMoDS data including when each data type
+#' Returns information about cached EnMoDS data including when each dataset
 #' was last downloaded, the date range it covers, and the file path.
 #'
 #' @returns Data frame with columns:
-#' - `type`: Data type (this_yr, yr_2_5, yr_5_10, historic)
+#' - `dataset`: Dataset (this_yr, yr_2_5, yr_5_10, historic)
 #' - `last_downloaded`: Date/time of last download
 #' - `date_range`: Date range covered by the data
 #' - `renmods_version`: Package version used to download data
@@ -180,9 +184,10 @@ cache_status <- function() {
 #' require re-downloading data. In interactive mode, prompts for confirmation
 #' before deletion.
 #'
-#' @param types Character. Which data types to remove. Either "all" (default)
+#' @param datasets Character. Which datasets to remove. Either "all" (default)
 #'   to remove all cached data and the cache directory, or one or more of
 #'   "this_yr", "yr_2_5", "yr_5_10", "historic".
+#' @param types Character. Deprecated, use `datasets` instead.
 #'
 #' @returns `TRUE` invisibly.
 #'
@@ -192,19 +197,24 @@ cache_status <- function() {
 #' # Remove all cached data
 #' cache_remove()
 #'
-#' # Remove specific data types
-#' cache_remove(types = c("this_yr", "yr_2_5"))
+#' # Remove specific datasets
+#' cache_remove(c("this_yr", "yr_2_5"))
 #'
 #' # Remove just historic data
-#' cache_remove(types = "historic")
+#' cache_remove("historic")
 #' }
-cache_remove <- function(types = "all") {
+cache_remove <- function(datasets = "all", types = NULL) {
+  if (!missing(types)) {
+    cli_alert("{.arg types} has been deprecated, use {.arg datasets} instead")
+    datasets <- types
+  }
+
   if (!cache_dir(check_only = TRUE)) {
     cli_inform("No cache to remove")
     return(invisible(TRUE))
   }
 
-  if (length(types) == 1 && types == "all") {
+  if (length(datasets) == 1 && datasets == "all") {
     full <- TRUE
     f <- c(
       cache_dir(),
@@ -217,8 +227,8 @@ cache_remove <- function(types = "all") {
     )
   } else {
     full <- FALSE
-    types <- check_types(types)
-    f <- cache_path(types)
+    datasets <- check_datasets(datasets)
+    f <- cache_path(datasets)
   }
 
   cli_alert_info("Cache to be removed:")

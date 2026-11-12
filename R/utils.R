@@ -116,26 +116,26 @@ char_to_dt <- function(dates) {
   as.Date(dt)
 }
 
-#' Determine which data types cover a date range
+#' Determine which datasets cover a date range
 #'
-#' Queries cache metadata to find which data types (this_yr, yr_2_5, yr_5_10,
+#' Queries cache metadata to find which datasets (this_yr, yr_2_5, yr_5_10,
 #' historic) contain data overlapping with the requested date range.
 #'
 #' @param dates Date or character vector of length 2. Start and end dates.
 #'
-#' @returns Character vector. Data types that overlap with the date range.
+#' @returns Character vector. Datasets that overlap with the date range.
 #'
 #' @noRd
 #' @examples
-#' which_data_types(c("2026-01-01", "2026-01-15"))  # this_yr
-#' which_data_types(c("2024-12-10", "2024-12-15"))  # yr_2_5
-#' which_data_types(c("2021-12-10", "2021-12-15"))  # yr_5_10
-#' which_data_types(c("2010-01-01", "2010-01-15"))  # historic
+#' which_datasets(c("2026-01-01", "2026-01-15"))  # this_yr
+#' which_datasets(c("2024-12-10", "2024-12-15"))  # yr_2_5
+#' which_datasets(c("2021-12-10", "2021-12-15"))  # yr_5_10
+#' which_datasets(c("2010-01-01", "2010-01-15"))  # historic
 #'
 #' # Multiple ranges
-#' which_data_types(c("2024-12-10", "2025-01-15"))  # this_yr, yr_2_5
+#' which_datasets(c("2024-12-10", "2025-01-15"))  # this_yr, yr_2_5
 
-which_data_types <- function(dates) {
+which_datasets <- function(dates) {
   meta <- cache_meta() |>
     dplyr::mutate(
       in_range = purrr::map_lgl(.data$date_range, \(dt) {
@@ -149,13 +149,13 @@ which_data_types <- function(dates) {
     )
   if (!any(meta$in_range, na.rm = TRUE)) {
     cli_abort(
-      "No data types cover this range of data ({dates}). See `cache_status()`. Do you need to update your data? See `?renmods_update()`",
+      "No datasets cover this range of data ({dates}). See `cache_status()`. Do you need to update your data? See `?renmods_update()`",
       call = NULL
     )
   }
   meta |>
     dplyr::filter(.data$in_range) |>
-    dplyr::pull(.data$type)
+    dplyr::pull(.data$dataset)
 }
 
 #' Prompt user for confirmation in interactive mode
@@ -232,10 +232,10 @@ write_meta <- function(meta) {
 
 #' Create empty meta data table
 #'
-#' Used to create initial table or to reset specific data types as they start
+#' Used to create initial table or to reset specific datasets as they start
 #' updating (this way if the update isn't complete, data is listed as missing).
 #'
-#' @param types Data types to include
+#' @param datasets Datasets to include
 #'
 #' @returns Tibble of blank metadata
 #'
@@ -244,9 +244,9 @@ write_meta <- function(meta) {
 #' meta_blank()
 #' meta_blank("this_yr")
 
-meta_blank <- function(types = renmods()$types) {
+meta_blank <- function(datasets = renmods()$datasets) {
   dplyr::tibble(
-    type = types,
+    dataset = datasets,
     last_downloaded = NA_character_,
     date_range = NA_character_,
     renmods_version = NA_character_,

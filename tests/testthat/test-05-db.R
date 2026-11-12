@@ -46,7 +46,10 @@ test_that("renmods_connect() requires cached data", {
 test_that("renmods_connect() & renmods_disconnect()", {
   op <- use_example_cache() # Use example cache in temp folder
 
-  expect_message(tbl <- renmods_connect(types = "historic"), "Connecting to") |>
+  expect_message(
+    tbl <- renmods_connect(datasets = "historic"),
+    "Connecting to"
+  ) |>
     expect_message("Last downloaded")
   expect_s3_class(tbl, "tbl_duckdb_connection")
   expect_rows(tbl)
@@ -80,10 +83,10 @@ test_that("renmods_connect() filters by date range", {
   options(op) # Reset cache location
 })
 
-test_that("renmods_connect() works with specific types", {
+test_that("renmods_connect() works with specific datasets", {
   op <- use_example_cache() # Use example cache in temp folder
 
-  expect_message(tbl <- renmods_connect(types = "this_yr")) |>
+  expect_message(tbl <- renmods_connect(datasets = "this_yr")) |>
     suppressMessages()
   expect_s3_class(tbl, "tbl_duckdb_connection")
   expect_rows(tbl)
@@ -93,19 +96,15 @@ test_that("renmods_connect() works with specific types", {
   options(op) # Reset cache location
 })
 
-test_that("renmods_connect() works with multiple types", {
+test_that("renmods_connect() works with multiple datasets", {
   op <- use_example_cache() # Use example cache in temp folder
 
-  # Check at least two types exist
+  # Check at least two datasets exist
   status <- cache_status()
-  available <- status$type[!is.na(status$path) & file.exists(status$path)]
-
-  if (length(available) < 2) {
-    skip("Need at least 2 cached data types for this test")
-  }
+  available <- status$dataset[!is.na(status$path) & file.exists(status$path)]
 
   expect_message(
-    tbl <- renmods_connect(types = available[1:2]),
+    tbl <- renmods_connect(datasets = available[1:2]),
     "Connecting"
   ) |>
     expect_message("Last downloaded") |>
@@ -118,12 +117,26 @@ test_that("renmods_connect() works with multiple types", {
   options(op) # Reset cache location
 })
 
-test_that("renmods_connect() works with 'all' types", {
+test_that("renmods_connect() works with 'all' datasets", {
   op <- use_example_cache() # Use example cache in temp folder
 
-  expect_message(tbl <- renmods_connect(types = "all")) |> suppressMessages()
+  expect_message(tbl <- renmods_connect(datasets = "all")) |> suppressMessages()
   expect_s3_class(tbl, "tbl_duckdb_connection")
   expect_rows(tbl)
+
+  # Clean up
+  renmods_disconnect(tbl)
+  options(op) # Reset cache location
+})
+
+test_that("renmods_connect() deprecate types", {
+  op <- use_example_cache() # Use example cache in temp folder
+
+  expect_message(
+    tbl <- renmods_connect(types = "this_yr"),
+    "`types` has been deprecated"
+  ) |>
+    suppressMessages()
 
   # Clean up
   renmods_disconnect(tbl)

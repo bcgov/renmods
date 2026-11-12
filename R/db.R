@@ -16,7 +16,7 @@
 #'
 #' Creates a DuckDB connection to cached EnMoDS Parquet data. The database table can be
 #' filtered using dplyr before collecting into a data frame with `collect()`.
-#' Using `dates` (date range) or `types` (data types) prefilters the data to a
+#' Using `dates` (date range) or `datasets` prefilters the data to a
 #' specific date range or specific data file. But if both are supplied, `dates`
 #' takes precedence. Only the data files required will be connected to and the
 #' fewer data sources connected to and the smaller the dataset, the quicker the
@@ -34,14 +34,15 @@
 #' @param dates Character or Date vector of length 2. Start and end dates for
 #'   filtering data ("YYYY-MM-DD"). Note that data is filtered by the
 #'   `Observed_Date_Time` field.
-#' @param types Character. Data types to connect to. One or more of
+#' @param datasets Character. Datasets to connect to. One or more of
 #'   "this_yr", "yr_2_5", "yr_5_10", "historic", or "all" (default "all").
 #'   Ignored if `dates` is specified.
 #' @param convert_times Logical. Whether or not to convert character date/times
 #'   to date/time format in R. Defaults to `TRUE`. If `FALSE` remain as
 #'   character.
 #' @param tz_disp Character. Timezone in which to display the data. Default is
-#'   America/Vancouver (i.e. UTC-7)
+#'   America/Vancouver (i.e. UTC-7).
+#' @param types Character. Deprecated, use `datasets` instead.
 #'
 #' @returns A `tbl_duckdb_connection` object - a lazy DuckDB table. Use dplyr
 #'   functions to filter/select, then `collect()` to load into R memory.
@@ -95,18 +96,24 @@
 
 renmods_connect <- function(
   dates = NULL,
-  types = "all",
+  datasets = "all",
   result_type = "numeric",
   convert_times = TRUE,
-  tz_disp = "Etc/GMT+7"
+  tz_disp = "Etc/GMT+7",
+  types = NULL
 ) {
+  if (!missing(types)) {
+    cli_alert("{.arg types} has been deprecated, use {.arg datasets} instead")
+    datasets <- types
+  }
+
   if (!is.null(dates)) {
     dates <- check_dates(dates, range = TRUE)
-    types <- which_data_types(dates)
-  } else if (!is.null(types)) {
-    types <- check_types(types)
+    datasets <- which_datasets(dates)
+  } else if (!is.null(datasets)) {
+    datasets <- check_datasets(datasets)
   } else {
-    types <- renmods()$types
+    datasets <- renmods()$datasets
   }
 
   if (
@@ -131,18 +138,18 @@ renmods_connect <- function(
 
   cli_alert_info(
     paste0(
-      "Connecting to {.val {types}} data",
+      "Connecting to {.val {datasets}} data",
       if (!is.null(dates)) " for dates between {dates[1]} and {dates[2]}"
     )
   )
 
   # Check we have all data and that it's up-to-date
-  purrr::walk(types, \(t) {
+  purrr::walk(datasets, \(t) {
     u <- check_cache(t)
     if (u) renmods_update_(t)
   })
 
-  path <- cache_path(types, "parquet")
+  path <- cache_path(datasets, "parquet")
 
   # https://duckdb.org/docs/stable/data/multiple_files/overview#csv
   sql <- paste0(
