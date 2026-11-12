@@ -32,7 +32,7 @@ to date/time format in R. Defaults to \code{TRUE}. If \code{FALSE} remain as
 character.}
 
 \item{tz_disp}{Character. Timezone in which to display the data. Default is
-America/Vancouver (i.e. UTC-7).}
+Etc/GMT+7 (i.e. UTC-7). Must be valid timezone from \code{\link[=OlsonNames]{OlsonNames()}}.}
 
 \item{types}{Character. Deprecated, use \code{datasets} instead.}
 }

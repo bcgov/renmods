@@ -39,7 +39,7 @@ db_add_date <- function(tbl, time_col = "Observed_Date_Time", date_col = NULL) {
 #' @export
 
 db_fmt_times <- function(tbl) {
-  time_cols <- stringr::str_subset(colnames(tbl), "Time")
+  time_cols <- stringr::str_subset(colnames(tbl), "(t|T)ime")
   tbl <- dplyr::mutate(tbl, ren_tz = !!sql_get_tz("Observed_Date_Time"))
   for (t in time_cols) {
     tbl <- dplyr::mutate(tbl, !!t := !!sql_get_time(t))

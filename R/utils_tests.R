@@ -44,6 +44,10 @@ use_example_cache <- function() {
     )
   write_meta(meta)
 
+  if (!check_version("this_yr")) {
+    cli_abort("Update the example cache data!", call = NULL)
+  }
+
   invisible(opts)
 }
 

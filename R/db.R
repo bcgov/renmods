@@ -45,7 +45,7 @@
 #'   to date/time format in R. Defaults to `TRUE`. If `FALSE` remain as
 #'   character.
 #' @param tz_disp Character. Timezone in which to display the data. Default is
-#'   America/Vancouver (i.e. UTC-7).
+#'   Etc/GMT+7 (i.e. UTC-7). Must be valid timezone from [OlsonNames()].
 #' @param types Character. Deprecated, use `datasets` instead.
 #'
 #' @returns A `tbl_duckdb_connection` object - a lazy DuckDB table. Use dplyr
@@ -121,6 +121,13 @@ renmods_connect <- function(
     datasets <- check_datasets(datasets)
   } else {
     datasets <- renmods()$datasets
+  }
+
+  if (!tz_disp %in% OlsonNames()) {
+    cli_abort(
+      "{.arg tz_disp} must be a valid timezone from {.fun OlsonNames}",
+      call = NULL
+    )
   }
 
   if (

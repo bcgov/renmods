@@ -47,7 +47,7 @@ renmods_update <- function(
   types = NULL
 ) {
   if (!missing(types)) {
-    cli_alert("{.arg types} has been deprecated, use {.arg dataset} instead")
+    cli_alert("{.arg types} has been deprecated, use {.arg datasets} instead")
     datasets <- types
   }
 
@@ -104,7 +104,7 @@ renmods_update_ <- function(dataset, cleanup = TRUE) {
   if (cleanup) {
     s <- file.remove(cache_path(dataset))
     if (s) {
-      cli_alert_success("csv.gz file successfull removed")
+      cli_alert_success("csv.gz file successfully removed")
     } else {
       cli_alert_warning("Could not remove csv.gz file")
     }
@@ -136,9 +136,10 @@ convert_parquet <- function(dataset) {
   path_parquet_temp <- cache_path(dataset, "parquet.tmp")
 
   cli_alert_info("Converting to Parquet: {path_parquet}")
-  cli_alert_success("Saving to cache: {path_parquet}")
 
   con <- db_connect()
+  on.exit(DBI::dbDisconnect(con))
+
   var_cols <- c("Result_Value", db_time_cols(con, path_csv))
   var_cols <- paste0("'", var_cols, "': 'VARCHAR'", collapse = ",")
 
@@ -168,7 +169,6 @@ convert_parquet <- function(dataset) {
     paste0("COPY (", sql, ") TO '", path_parquet_temp, "' ",
            "(FORMAT parquet, COMPRESSION zstd)")
   )
-  DBI::dbDisconnect(con)
 
   file.rename(path_parquet_temp, path_parquet)
 

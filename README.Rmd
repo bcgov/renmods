@@ -58,7 +58,7 @@ pkg_install("bcgov/renmods")
 After updating, it's recommended to remove your cache and re-download the data.
 The downloads will take a bit of time, but this will ensure there are no complications due to the update.
 
-Note that will get a warning if you try to work with data downloaded with a different version of renmods.
+Note that you will get a warning if you try to work with data downloaded with a different version of renmods, and an error if it is so different that we have a metadata mismatch.
 
 ```{r}
 #| eval: false

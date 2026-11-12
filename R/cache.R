@@ -125,6 +125,10 @@ cache_meta <- function(
     f_parquet <- cache_path(datasets, "parquet")
     f_parquet <- f_parquet[file.exists(f_parquet)]
 
+    if (!length(f_csv) || !length(f_parquet)) {
+      cli_abort("Missing downloaded data, try again...", call = NULL)
+    }
+
     dates <- extract_date_range(f_csv)
 
     meta <- dplyr::rows_upsert(
@@ -228,7 +232,7 @@ cache_remove <- function(datasets = "all", types = NULL) {
   } else {
     full <- FALSE
     datasets <- check_datasets(datasets)
-    f <- cache_path(datasets)
+    f <- cache_path(datasets, "parquet")
   }
 
   cli_alert_info("Cache to be removed:")

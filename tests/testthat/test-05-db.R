@@ -45,6 +45,7 @@ test_that("renmods_connect() requires cached data", {
 
 test_that("renmods_connect() & renmods_disconnect()", {
   op <- use_example_cache() # Use example cache in temp folder
+  withr::defer(options(op))
 
   expect_message(
     tbl <- renmods_connect(datasets = "historic"),
@@ -62,13 +63,11 @@ test_that("renmods_connect() & renmods_disconnect()", {
   # Closes down the connection
   expect_silent(renmods_disconnect(tbl))
   expect_warning(renmods_disconnect(tbl), "Connection already closed")
-
-  # Clean up
-  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() filters by date range", {
   op <- use_example_cache() # Use example cache in temp folder
+  withr::defer(options(op))
 
   dates <- c("2010-01-01", "2017-12-31")
   expect_message(tbl <- renmods_connect(dates = dates)) |> suppressMessages()
@@ -76,15 +75,15 @@ test_that("renmods_connect() filters by date range", {
   expect_rows(tbl)
   dts <- collect(tbl) |> dplyr::pull(ren_date)
   expect_gte(min(dts), dates[1])
-  expect_lte(min(dts), dates[2])
+  expect_lte(max(dts), dates[2])
 
   # Clean up
   renmods_disconnect(tbl)
-  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() works with specific datasets", {
   op <- use_example_cache() # Use example cache in temp folder
+  withr::defer(options(op))
 
   expect_message(tbl <- renmods_connect(datasets = "this_yr")) |>
     suppressMessages()
@@ -93,11 +92,11 @@ test_that("renmods_connect() works with specific datasets", {
 
   # Clean up
   renmods_disconnect(tbl)
-  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() works with multiple datasets", {
   op <- use_example_cache() # Use example cache in temp folder
+  withr::defer(options(op))
 
   # Check at least two datasets exist
   status <- cache_status()
@@ -114,11 +113,11 @@ test_that("renmods_connect() works with multiple datasets", {
 
   # Clean up
   renmods_disconnect(tbl)
-  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() works with 'all' datasets", {
   op <- use_example_cache() # Use example cache in temp folder
+  withr::defer(options(op))
 
   expect_message(tbl <- renmods_connect(datasets = "all")) |> suppressMessages()
   expect_s3_class(tbl, "tbl_duckdb_connection")
@@ -126,11 +125,11 @@ test_that("renmods_connect() works with 'all' datasets", {
 
   # Clean up
   renmods_disconnect(tbl)
-  options(op) # Reset cache location
 })
 
 test_that("renmods_connect() deprecate types", {
   op <- use_example_cache() # Use example cache in temp folder
+  withr::defer(options(op))
 
   expect_message(
     tbl <- renmods_connect(types = "this_yr"),
@@ -140,5 +139,4 @@ test_that("renmods_connect() deprecate types", {
 
   # Clean up
   renmods_disconnect(tbl)
-  options(op) # Reset cache location
 })
