@@ -24,12 +24,12 @@ renmods_disconnect(tbl)
 ``` r
 db <- renmods_connect()
 #> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
-#> ✔ this_yr: Last downloaded 2026-11-19 19:35:46 (within 1 week(s))
-#> ✔ yr_2_5: Last downloaded 2026-11-19 19:35:46 (within 26 week(s))
-#> ✔ yr_5_10: Last downloaded 2026-11-19 19:35:46 (within 26 week(s))
-#> ✔ historic: Last downloaded 2026-11-19 19:35:46 (within 26 week(s))
+#> ✔ this_yr: Last downloaded 2026-11-19 19:59:25 (within 1 week(s))
+#> ✔ yr_2_5: Last downloaded 2026-11-19 19:59:25 (within 26 week(s))
+#> ✔ yr_5_10: Last downloaded 2026-11-19 19:59:25 (within 26 week(s))
+#> ✔ historic: Last downloaded 2026-11-19 19:59:25 (within 26 week(s))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpbjBTRj/duckdb
+#> ℹ /tmp/Rtmp9KsHTM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.

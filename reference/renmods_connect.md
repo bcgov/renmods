@@ -90,12 +90,12 @@ function.
 # All data
 db <- renmods_connect()
 #> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
-#> ✔ this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))
-#> ✔ yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
+#> ✔ this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))
+#> ✔ yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpbjBTRj/duckdb
+#> ℹ /tmp/Rtmp9KsHTM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
@@ -121,12 +121,12 @@ df <- renmods_connect() |>
   filter(Location_ID %in% c("E327371", "E300230")) |>
   collect()
 #> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
-#> ✔ this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))
-#> ✔ yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
+#> ✔ this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))
+#> ✔ yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpbjBTRj/duckdb
+#> ℹ /tmp/Rtmp9KsHTM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
@@ -137,9 +137,9 @@ df <- renmods_connect() |>
 # Automatically connects only to datasets required for a specific date range
 db <- renmods_connect(dates = c("2025-01-01", "2025-02-01"))
 #> ℹ Connecting to "this_yr" data for dates between 2025-01-01 and 2025-02-01
-#> ✔ this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))
+#> ✔ this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpbjBTRj/duckdb
+#> ℹ /tmp/Rtmp9KsHTM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
@@ -148,9 +148,9 @@ db <- renmods_connect(dates = c("2025-01-01", "2025-02-01"))
 #> ℹ See ?duckdb_storage for details and alternatives.
 db <- renmods_connect(dates = c("1990-01-01", "1990-02-01"))
 #> ℹ Connecting to "historic" data for dates between 1990-01-01 and 1990-02-01
-#> ✔ historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
+#> ✔ historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpbjBTRj/duckdb
+#> ℹ /tmp/Rtmp9KsHTM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
@@ -162,12 +162,12 @@ db <- renmods_connect(dates = c("1990-01-01", "1990-02-01"))
 # But you can specify non-numeric data
 db <- renmods_connect(result_type = "non-numeric")
 #> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
-#> ✔ this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))
-#> ✔ yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
+#> ✔ this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))
+#> ✔ yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpbjBTRj/duckdb
+#> ℹ /tmp/Rtmp9KsHTM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
@@ -176,7 +176,7 @@ db <- renmods_connect(result_type = "non-numeric")
 #> ℹ See ?duckdb_storage for details and alternatives.
 select(db, "Observed_Property_ID", "Result_Value")
 #> # A query:  ?? x 2
-#> # Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1019-azure:R 4.6.2/:memory:]
+#> # Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1020-azure:R 4.6.2/:memory:]
 #> # ℹ 2 variables: Observed_Property_ID <chr>, Result_Value <chr>
 
 # Or even *all* data
@@ -184,12 +184,12 @@ select(db, "Observed_Property_ID", "Result_Value")
 #  Result_Value will be "character"
 db <- renmods_connect(result_type = "all")
 #> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
-#> ✔ this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))
-#> ✔ yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
+#> ✔ this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))
+#> ✔ yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpbjBTRj/duckdb
+#> ℹ /tmp/Rtmp9KsHTM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
@@ -200,7 +200,7 @@ db <- renmods_connect(result_type = "all")
 #> numeric, categorical, and/or character values
 select(db, "Observed_Property_ID", "Result_Value")
 #> # A query:  ?? x 2
-#> # Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1019-azure:R 4.6.2/:memory:]
+#> # Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1020-azure:R 4.6.2/:memory:]
 #>    Observed_Property_ID                        Result_Value
 #>    <chr>                                       <chr>       
 #>  1 Potassium Dissolved (fl. conc.)             0.12        
@@ -239,7 +239,7 @@ glimpse(db)
 #> $ Result_Status                 <chr> "Preliminary", "Preliminary", "Prelimina…
 #> $ Result_Grade                  <chr> "Ungraded", "Ungraded", "Ungraded", "Ung…
 #> $ ren_date                      <date> 2025-04-14, 2025-04-14, 2025-04-14, 202…
-#> $ filename                      <chr> "/tmp/RtmpbjBTRj/renmods_cache/this_yr.p…
+#> $ filename                      <chr> "/tmp/Rtmp9KsHTM/renmods_cache/this_yr.p…
 #> $ ren_tz                        <chr> "-08:00", "-08:00", "-08:00", "-08:00", …
 
 # Filter and collect specific data
@@ -252,12 +252,12 @@ df <- renmods_connect() |>
   ) |>
   collect()
 #> ℹ Connecting to "this_yr", "yr_2_5", "yr_5_10", and "historic" data
-#> ✔ this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))
-#> ✔ yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
-#> ✔ historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))
+#> ✔ this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))
+#> ✔ yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
+#> ✔ historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpbjBTRj/duckdb
+#> ℹ /tmp/Rtmp9KsHTM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.

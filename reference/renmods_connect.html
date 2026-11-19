@@ -48,7 +48,7 @@ collect() function will run."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Connect to EnMoDS data via DuckDB</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bcgov/renmods/blob/main/R/db.R" class="external-link"><code>R/db.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bcgov/renmods/blob/v2.0.0/R/db.R" class="external-link"><code>R/db.R</code></a></small>
       <div class="d-none name"><code>renmods_connect.Rd</code></div>
     </div>
 
@@ -135,12 +135,12 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-in"><span><span class="co"># All data</span></span></span>
 <span class="r-in"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu">renmods_connect</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Connecting to <span style="color: #0000BB;">"this_yr"</span>, <span style="color: #0000BB;">"yr_2_5"</span>, <span style="color: #0000BB;">"yr_5_10"</span>, and <span style="color: #0000BB;">"historic"</span> data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> duckdb keeps downloaded extensions and secrets in a temporary directory:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/RtmpbjBTRj/duckdb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/Rtmp9KsHTM/duckdb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is removed when the R session ends.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Secrets are lost.</span>
@@ -166,12 +166,12 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Location_ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E327371"</span>, <span class="st">"E300230"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="collect.html">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Connecting to <span style="color: #0000BB;">"this_yr"</span>, <span style="color: #0000BB;">"yr_2_5"</span>, <span style="color: #0000BB;">"yr_5_10"</span>, and <span style="color: #0000BB;">"historic"</span> data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> duckdb keeps downloaded extensions and secrets in a temporary directory:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/RtmpbjBTRj/duckdb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/Rtmp9KsHTM/duckdb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is removed when the R session ends.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Secrets are lost.</span>
@@ -182,9 +182,9 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-in"><span><span class="co"># Automatically connects only to datasets required for a specific date range</span></span></span>
 <span class="r-in"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu">renmods_connect</span><span class="op">(</span>dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2025-01-01"</span>, <span class="st">"2025-02-01"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Connecting to <span style="color: #0000BB;">"this_yr"</span> data for dates between 2025-01-01 and 2025-02-01</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> duckdb keeps downloaded extensions and secrets in a temporary directory:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/RtmpbjBTRj/duckdb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/Rtmp9KsHTM/duckdb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is removed when the R session ends.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Secrets are lost.</span>
@@ -193,9 +193,9 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> See ?duckdb_storage for details and alternatives.</span>
 <span class="r-in"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu">renmods_connect</span><span class="op">(</span>dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1990-01-01"</span>, <span class="st">"1990-02-01"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Connecting to <span style="color: #0000BB;">"historic"</span> data for dates between 1990-01-01 and 1990-02-01</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> duckdb keeps downloaded extensions and secrets in a temporary directory:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/RtmpbjBTRj/duckdb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/Rtmp9KsHTM/duckdb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is removed when the R session ends.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Secrets are lost.</span>
@@ -207,12 +207,12 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-in"><span><span class="co"># But you can specify non-numeric data</span></span></span>
 <span class="r-in"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu">renmods_connect</span><span class="op">(</span>result_type <span class="op">=</span> <span class="st">"non-numeric"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Connecting to <span style="color: #0000BB;">"this_yr"</span>, <span style="color: #0000BB;">"yr_2_5"</span>, <span style="color: #0000BB;">"yr_5_10"</span>, and <span style="color: #0000BB;">"historic"</span> data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> duckdb keeps downloaded extensions and secrets in a temporary directory:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/RtmpbjBTRj/duckdb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/Rtmp9KsHTM/duckdb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is removed when the R session ends.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Secrets are lost.</span>
@@ -221,7 +221,7 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> See ?duckdb_storage for details and alternatives.</span>
 <span class="r-in"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">db</span>, <span class="st">"Observed_Property_ID"</span>, <span class="st">"Result_Value"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A query:  ?? x 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1019-azure:R 4.6.2/:memory:]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1020-azure:R 4.6.2/:memory:]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 variables: Observed_Property_ID &lt;chr&gt;, Result_Value &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or even *all* data</span></span></span>
@@ -229,12 +229,12 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-in"><span><span class="co">#  Result_Value will be "character"</span></span></span>
 <span class="r-in"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu">renmods_connect</span><span class="op">(</span>result_type <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Connecting to <span style="color: #0000BB;">"this_yr"</span>, <span style="color: #0000BB;">"yr_2_5"</span>, <span style="color: #0000BB;">"yr_5_10"</span>, and <span style="color: #0000BB;">"historic"</span> data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> duckdb keeps downloaded extensions and secrets in a temporary directory:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/RtmpbjBTRj/duckdb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/Rtmp9KsHTM/duckdb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is removed when the R session ends.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Secrets are lost.</span>
@@ -245,7 +245,7 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> numeric, categorical, and/or character values</span>
 <span class="r-in"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">db</span>, <span class="st">"Observed_Property_ID"</span>, <span class="st">"Result_Value"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A query:  ?? x 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1019-azure:R 4.6.2/:memory:]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1020-azure:R 4.6.2/:memory:]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Observed_Property_ID                        Result_Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Potassium Dissolved (fl. conc.)             0.12        </span>
@@ -284,7 +284,7 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ Result_Status                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Preliminary"<span style="color: #949494;">, </span>"Preliminary"<span style="color: #949494;">, </span>"Prelimina…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ Result_Grade                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Ungraded"<span style="color: #949494;">, </span>"Ungraded"<span style="color: #949494;">, </span>"Ungraded"<span style="color: #949494;">, </span>"Ung…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ ren_date                      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2025-04-14<span style="color: #949494;">, </span>2025-04-14<span style="color: #949494;">, </span>2025-04-14<span style="color: #949494;">, </span>202…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ filename                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "/tmp/RtmpbjBTRj/renmods_cache/this_yr.p…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ filename                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "/tmp/Rtmp9KsHTM/renmods_cache/this_yr.p…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ ren_tz                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "-08:00"<span style="color: #949494;">, </span>"-08:00"<span style="color: #949494;">, </span>"-08:00"<span style="color: #949494;">, </span>"-08:00"<span style="color: #949494;">, </span>…</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Filter and collect specific data</span></span></span>
@@ -297,12 +297,12 @@ The original timezone from <code>Observed_Date_Time</code> is stored in a new fi
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="collect.html">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Connecting to <span style="color: #0000BB;">"this_yr"</span>, <span style="color: #0000BB;">"yr_2_5"</span>, <span style="color: #0000BB;">"yr_5_10"</span>, and <span style="color: #0000BB;">"historic"</span> data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:35:42 (within 1 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:35:42 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> this_yr: Last downloaded 2026-11-19 19:59:21 (within 1 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_2_5: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> yr_5_10: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> historic: Last downloaded 2026-11-19 19:59:21 (within 26 week(s))</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> duckdb keeps downloaded extensions and secrets in a temporary directory:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/RtmpbjBTRj/duckdb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> /tmp/Rtmp9KsHTM/duckdb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is removed when the R session ends.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Secrets are lost.</span>

@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/bcgov/renmods/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/bcgov/renmods/blob/v2.0.0/DESCRIPTION)
 
 LaZerte S (2026). *renmods: Download and query data from B.C.
 Environmental Monitoring Data System (EnMoDs)*. R package version 0.0.4,
