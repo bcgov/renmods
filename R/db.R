@@ -12,17 +12,17 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-#' Connect to ENMODS data via DuckDB
+#' Connect to EnMoDS data via DuckDB
 #'
-#' Creates a DuckDB connection to cached ENMODS data. The database table can be
+#' Creates a DuckDB connection to cached EnMoDS Parquet data. The database table can be
 #' filtered using dplyr before collecting into a data frame with `collect()`.
-#' Using `dates` (date range) or `types` (data types) prefilters the data to a
+#' Using `dates` (date range) or `datasets` prefilters the data to a
 #' specific date range or specific data file. But if both are supplied, `dates`
 #' takes precedence. Only the data files required will be connected to and the
 #' fewer data sources connected to and the smaller the dataset, the quicker the
 #' `collect()` function will run.
 #'
-#' Note that ENMODS stores date/times as character/text fields with the timezone
+#' Note that EnMoDS stores date/times as character/text fields with the timezone
 #' indicated by +/- offset (e.g., '-08:00'). However, in R all values in a
 #' column must use the same timezone. Therefore times are converted to UTC-7:00
 #' (called `Etc/GMT+7`, note that `+` is correct; see the [Wikipedia page on
@@ -34,37 +34,60 @@
 #' @param dates Character or Date vector of length 2. Start and end dates for
 #'   filtering data ("YYYY-MM-DD"). Note that data is filtered by the
 #'   `Observed_Date_Time` field.
-#' @param types Character. Data types to connect to. One or more of
+#' @param datasets Character. Datasets to connect to. One or more of
 #'   "this_yr", "yr_2_5", "yr_5_10", "historic", or "all" (default "all").
 #'   Ignored if `dates` is specified.
+#' @param result_type Character. Which types of results to return, "numeric"
+#'   (default), "non-numeric", or "all" (not recommended). If "numeric",
+#'   `Result_Value` is converted to numeric, otherwise left as character. Result
+#'   types are based on the value of `Observed_Property_Result_Type`.
 #' @param convert_times Logical. Whether or not to convert character date/times
 #'   to date/time format in R. Defaults to `TRUE`. If `FALSE` remain as
 #'   character.
+#' @param tz_disp Character. Timezone in which to display the data. Default is
+#'   Etc/GMT+7 (i.e. UTC-7). Must be valid timezone from [OlsonNames()].
+#' @param types Character. Deprecated, use `datasets` instead.
 #'
 #' @returns A `tbl_duckdb_connection` object - a lazy DuckDB table. Use dplyr
 #'   functions to filter/select, then `collect()` to load into R memory.
 #'
 #' @export
-#' @examplesIf interactive()
+#' @examples
+#' \dontshow{op <- renmods:::use_example_cache()}
+#'
+#'
 #' # All data
 #' db <- renmods_connect()
 #'
-#' # All current data
-#' db <- renmods_connect(types = "this_yr")
+#' # Use dplyr to filter and manipulate the data
+#' library(dplyr)
 #'
-#' # Connect only to data types required for a specific date range
+#' # Filter and collect into a data frame
+#' df <- renmods_connect() |>
+#'   filter(Location_ID %in% c("E327371", "E300230")) |>
+#'   collect()
+#'
+#' # Automatically connects only to datasets required for a specific date range
 #' db <- renmods_connect(dates = c("2025-01-01", "2025-02-01"))
 #' db <- renmods_connect(dates = c("1990-01-01", "1990-02-01"))
 #'
-#' # Use dplyr to manipulate the data
-#' library(dplyr)
+#' # By default, only returns data where Observed_Property_Result_Type is NUMERIC
+#' # But you can specify non-numeric data
+#' db <- renmods_connect(result_type = "non-numeric")
+#' select(db, "Observed_Property_ID", "Result_Value")
+#'
+#' # Or even *all* data
+#' # Note: This will result in a mix of numeric and non-numeric and
+#' #  Result_Value will be "character"
+#' db <- renmods_connect(result_type = "all")
+#' select(db, "Observed_Property_ID", "Result_Value")
 #'
 #' # Explore the data and column names
 #' colnames(db)
 #' glimpse(db)
 #'
 #' # Filter and collect specific data
-#' df <- db |>
+#' df <- renmods_connect() |>
 #'   filter(Location_ID %in% c("E327371", "E300230")) |>
 #'   select(
 #'     "Location_ID", "Location_Name", "Observed_Date_Time",
@@ -75,50 +98,82 @@
 #'
 #' # Remember to shut down the connection when you're done
 #' renmods_disconnect(db)
+#'
+#' \dontshow{options(op)}
 
-renmods_connect <- function(dates = NULL, types = "all", convert_times = TRUE) {
+renmods_connect <- function(
+  dates = NULL,
+  datasets = "all",
+  result_type = "numeric",
+  convert_times = TRUE,
+  tz_disp = "Etc/GMT+7",
+  types = NULL
+) {
+  if (!missing(types)) {
+    cli_alert("{.arg types} has been deprecated, use {.arg datasets} instead")
+    datasets <- types
+  }
+
   if (!is.null(dates)) {
     dates <- check_dates(dates, range = TRUE)
-    types <- which_data_types(dates)
-  } else if (!is.null(types)) {
-    types <- check_types(types)
+    datasets <- which_datasets(dates)
+  } else if (!is.null(datasets)) {
+    datasets <- check_datasets(datasets)
   } else {
-    types <- renmods()$types
+    datasets <- renmods()$datasets
+  }
+
+  if (length(tz_disp) != 1 || !tz_disp %in% OlsonNames()) {
+    cli_abort(
+      "{.arg tz_disp} must be a single valid timezone from {.fun OlsonNames}",
+      call = NULL
+    )
+  }
+
+  if (
+    is.null(result_type) ||
+      !is.character(result_type) ||
+      length(result_type) > 1 ||
+      !result_type %in% c("numeric", "non-numeric", "all")
+  ) {
+    cli_abort(
+      "{.arg result_type} must be one of 'numeric', 'non-numeric', or 'all'",
+      call = NULL
+    )
   }
 
   # Check cache exists
   if (!cache_dir(check_only = TRUE)) {
     cli_abort(
-      "No ENMODS data has been downloaded. First try `renmods_update()`",
+      "No EnMoDS data has been downloaded. First try `renmods_update()`",
       call = NULL
     )
   }
 
   cli_alert_info(
     paste0(
-      "Connecting to {.val {types}} data",
+      "Connecting to {.val {datasets}} data",
       if (!is.null(dates)) " for dates between {dates[1]} and {dates[2]}"
     )
   )
 
   # Check we have all data and that it's up-to-date
-  purrr::walk(types, \(t) {
+  purrr::walk(datasets, \(t) {
     u <- check_cache(t)
     if (u) renmods_update_(t)
   })
 
-  path <- cache_path(types)
+  path <- cache_path(datasets, "parquet")
 
   # https://duckdb.org/docs/stable/data/multiple_files/overview#csv
   sql <- paste0(
-    "read_csv(['",
+    "read_parquet(['",
     paste0(path, collapse = "', '"),
-    "'], compression = 'gzip', union_by_name = true, filename = true)"
+    "'], union_by_name = true, filename = true)"
   )
 
-  tbl <- db_connect() |>
-    duckdb::tbl_function(sql) |>
-    db_add_date(date_col = "ren_date")
+  tbl <- db_connect(tz_disp = tz_disp) |>
+    duckdb::tbl_function(sql)
 
   if (!is.null(dates)) {
     tbl <- tbl |>
@@ -132,6 +187,20 @@ renmods_connect <- function(dates = NULL, types = "all", convert_times = TRUE) {
   # Fix all date/times
   if (convert_times) {
     tbl <- db_fmt_times(tbl)
+  }
+
+  # Filter & convert by result_type
+  if (result_type == "numeric") {
+    tbl <- tbl |>
+      dplyr::filter(.data$Observed_Property_Result_Type == "NUMERIC") |>
+      dplyr::mutate(Result_Value = as.numeric(.data$Result_Value))
+  } else if (result_type == "non-numeric") {
+    tbl <- dplyr::filter(tbl, .data$Observed_Property_Result_Type != "NUMERIC")
+  } else if (result_type == "all") {
+    cli_warn(
+      "Using {.arg result_type = 'all'} means that 'Result_Values' may be a combination of numeric, categorical, and/or character values",
+      call = NULL
+    )
   }
 
   tbl
@@ -153,18 +222,17 @@ renmods_connect <- function(dates = NULL, types = "all", convert_times = TRUE) {
 #' @examples
 #' con <- db_connect()
 
-db_connect <- function() {
+db_connect <- function(tz_disp = "Etc/GMT+7") {
   con <- DBI::dbConnect(
     duckdb::duckdb(),
     config = list(
       autoinstall_known_extensions = TRUE,
       autoload_known_extensions = TRUE
-    ),
-    timezone_out = "Etc/GMT+7", # Otherwise defaults to UTC
-    tz_out_convert = "with" # Convert timezones, do not force
+    )
   )
   check_db_httpsfs(con)
   check_db_icu(con)
+  DBI::dbExecute(con, paste0("SET TimeZone = '", tz_disp, "'"))
   con
 }
 
@@ -175,9 +243,11 @@ db_connect <- function() {
 #' @returns `NULL` invisibly. Called for side effect of disconnecting database.
 #'
 #' @export
-#' @examplesIf interactive()
+#' @examples
+#' \dontshow{op <- renmods:::use_example_cache()}
 #' db <- renmods_connect()
 #' renmods_disconnect(db)
+#' \dontshow{options(op)}
 
 renmods_disconnect <- function(tbl) {
   if (!inherits(tbl, "tbl_duckdb_connection")) {

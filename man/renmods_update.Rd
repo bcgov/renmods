@@ -2,22 +2,32 @@
 % Please edit documentation in R/download.R
 \name{renmods_update}
 \alias{renmods_update}
-\title{Update cached ENMODS data}
+\title{Update cached EnMoDS data}
 \usage{
-renmods_update(types = "this_yr", force = FALSE)
+renmods_update(
+  datasets = "this_yr",
+  force = FALSE,
+  cleanup = TRUE,
+  types = NULL
+)
 }
 \arguments{
-\item{types}{Character. Which data types to update. One or more of
+\item{datasets}{Character. Which datasets to update. One or more of
 "this_yr", "yr_2_5", "yr_5_10", "historic", or "all" (default "this_yr").}
 
 \item{force}{Logical. If \code{TRUE}, downloads data even if cache is up-to-date
 (default \code{FALSE}).}
+
+\item{cleanup}{Logical. Whether to remove the downloaded \code{csv.gz} file(s)
+after conversion to parquet. Defaults to TRUE.}
+
+\item{types}{Character. Deprecated, use \code{datasets} instead.}
 }
 \value{
 \code{NULL} invisibly. Called for side effect of downloading data.
 }
 \description{
-Downloads ENMODS data from BC Gov and saves to the local cache.
+Downloads EnMoDS data from BC Gov and saves to the local cache.
 By default, only missing or outdated data is downloaded.
 }
 \examples{
@@ -25,10 +35,10 @@ By default, only missing or outdated data is downloaded.
 # Update current year data
 renmods_update()
 
-# Update all data types
+# Update all datasets
 renmods_update("all")
 
-# Force update of specific types
+# Force update of specific datasets
 renmods_update(c("this_yr", "yr_2_5"), force = TRUE)
 }
 }

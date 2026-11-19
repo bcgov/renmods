@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-ENMODS contains many variables and parameters. They have a reference list for these
+EnMoDS contains many variables and parameters. They have a reference list for these
 variables online: https://www2.gov.bc.ca/gov/content/environment/research-monitoring-reporting/monitoring/environmental-monitoring-data-system#resources
 
 renmods adds a couple of extra variables created from the data. 

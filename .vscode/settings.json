@@ -12,11 +12,10 @@
         "bcgovr",
         "colnames",
         "duckdb",
-        "ENMODS",
+        "EnMoDS",
         "envir",
         "github",
         "httr",
-        "renmods",
-        "RENMODS"
+        "renmods"
     ]
 }

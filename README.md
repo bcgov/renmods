@@ -6,7 +6,7 @@
 [![img](https://img.shields.io/badge/Lifecycle-Experimental-339999)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
 [![R-CMD-check](https://github.com/steffilazerte/renmods/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/steffilazerte/renmods/actions/workflows/R-CMD-check.yaml)
 [![Code Coverage:
-83%](https://img.shields.io/badge/code_coverage-83%25-green)](#code-coverage)
+84%](https://img.shields.io/badge/code_coverage-84%25-green)](#code-coverage)
 <!-- badges: end -->
 
 # renmods
@@ -23,11 +23,15 @@ Columbia](https://www2.gov.bc.ca/gov/content?id=A519A56BC2BF44E4A008B33FCF527F61
 
 ### Features
 
-- Download ENMODS data and cache locally
-- Simple connections to the ENMODS database, only to as much data as
-  required to speed up load times.
+- Download EnMoDS data and cache locally
+- Converts to Parquet files for speedy connections and filtering
+- Straightforward data connections, only to as much data as required to
+  speed up load times.
 
 ### Installation
+
+If installing on Linux, see the troubleshooting section below for a
+faster method.
 
 ``` r
 # install.packages("pak") # if not already installed
@@ -36,11 +40,26 @@ library(pak)
 pkg_install("bcgov/renmods")
 ```
 
+### Updating
+
+After updating, it’s recommended to remove your cache and re-download
+the data. The downloads will take a bit of time, but this will ensure
+there are no complications due to the update.
+
+Note that will get a warning if you try to work with data downloaded
+with a different version of renmods.
+
+``` r
+library(renmods)
+cache_remove()
+renmods_update("all")
+```
+
 ### Usage
 
 See the [Get
-Started](https://bcgov.github.io/renmods/articles/renmods.html)
-tutorial for details
+Started](https://bcgov.github.io/renmods/articles/renmods.html) tutorial
+for details
 
 ### Project Status
 
@@ -50,6 +69,26 @@ Very first stages of development.
 
 To report bugs/issues/feature requests, please file an
 [issue](https://github.com/bcgov/renmods/issues/).
+
+### Troubleshooting
+
+**Installing duckdb on Linux is so slow!!!**
+
+Solution: First install duckdb from the Posit Public Package Manager for
+Linux, then continue on with your installation of renmods.
+
+(ref: <https://github.com/duckdb/duckdb-r#installation-from-cran>)
+
+``` r
+install.packages(
+  "duckdb",
+  repos = sprintf(
+    "https://p3m.dev/cran/latest/bin/linux/manylinux_2_28-%s/%s",
+    R.version["arch"],
+    substr(getRversion(), 1, 3)
+  )
+)
+```
 
 ### How to Contribute
 
@@ -62,13 +101,13 @@ to abide by its terms.
 
 ## Code Coverage
 
-    #> renmods Coverage: 83.09%
-    #> R/checks.R: 62.11%
-    #> R/db.R: 88.33%
-    #> R/cache.R: 89.19%
-    #> R/utils.R: 89.19%
+    #> renmods Coverage: 83.88%
+    #> R/checks.R: 60.00%
+    #> R/db.R: 87.93%
+    #> R/cache.R: 89.61%
+    #> R/utils.R: 89.74%
+    #> R/download.R: 98.18%
     #> R/db_utils.R: 100.00%
-    #> R/download.R: 100.00%
     #> R/test-utils.R: 100.00%
     #> R/zzz.R: 100.00%
 

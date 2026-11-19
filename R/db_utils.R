@@ -1,3 +1,11 @@
+db_time_cols <- function(con, path) {
+  cols <- con |>
+    duckdb::tbl_function(paste0("read_csv('", path, "')")) |>
+    colnames()
+
+  stringr::str_subset(cols, "(t|T)ime")
+}
+
 #' Create new field with local date
 #'
 #' Converts a time/date column to just local date (i.e. truncates the time
@@ -31,7 +39,7 @@ db_add_date <- function(tbl, time_col = "Observed_Date_Time", date_col = NULL) {
 #' @export
 
 db_fmt_times <- function(tbl) {
-  time_cols <- stringr::str_subset(colnames(tbl), "Time")
+  time_cols <- stringr::str_subset(colnames(tbl), "(t|T)ime")
   tbl <- dplyr::mutate(tbl, ren_tz = !!sql_get_tz("Observed_Date_Time"))
   for (t in time_cols) {
     tbl <- dplyr::mutate(tbl, !!t := !!sql_get_time(t))
@@ -93,7 +101,7 @@ sql_get_tz <- function(col_name) {
 #'
 #' @noRd
 #' @examples
-#' sql_get_tz("Observed_Date_Time")
+#' sql_get_time("Observed_Date_Time")
 
 sql_get_time <- function(col_name) {
   dplyr::sql(paste0("STRPTIME(", col_name, ", '%Y-%m-%dT%H:%M%z')"))

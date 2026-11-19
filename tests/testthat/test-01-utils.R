@@ -1,14 +1,11 @@
 # Test extract_date_range() -----------------------------------------------------
 test_that("extract_date_range()", {
-  skip_if_no_cache()
-  expect_silent(r <- extract_date_range(cache_path("this_yr")))
+  f <- test_path("fixtures", "this_yr.csv.gz")
+  expect_silent(r <- extract_date_range(f))
   expect_type(r, "character")
+  expect_equal(r, "2025-01-01 to 2026-11-07")
 
-  expect_silent(extract_date_range(cache_path("yr_2_5")))
-  expect_silent(extract_date_range(cache_path("yr_5_10")))
-  expect_silent(extract_date_range(cache_path("historic")))
-
-  expect_silent(r <- extract_date_range(cache_path(c("this_yr", "historic"))))
+  expect_silent(r <- extract_date_range(c(f, f)))
   expect_length(r, 2)
 })
 

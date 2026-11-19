@@ -9,7 +9,7 @@ cache_status()
 \value{
 Data frame with columns:
 \itemize{
-\item \code{type}: Data type (this_yr, yr_2_5, yr_5_10, historic)
+\item \code{dataset}: Dataset (this_yr, yr_2_5, yr_5_10, historic)
 \item \code{last_downloaded}: Date/time of last download
 \item \code{date_range}: Date range covered by the data
 \item \code{renmods_version}: Package version used to download data
@@ -17,10 +17,15 @@ Data frame with columns:
 }
 }
 \description{
-Returns information about cached ENMODS data including when each data type
+Returns information about cached EnMoDS data including when each dataset
 was last downloaded, the date range it covers, and the file path.
 }
 \examples{
 # View status of all cached data
 cache_status()
+
+# After download
+\dontshow{op <- renmods:::use_example_cache()}
+cache_status()
+\dontshow{options(op)}
 }

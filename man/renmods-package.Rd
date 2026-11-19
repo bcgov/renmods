@@ -4,10 +4,43 @@
 \name{renmods-package}
 \alias{renmods}
 \alias{renmods-package}
-\title{renmods: Downloads and queries data from B.C. Environmental Monitoring Data System (EnMoDs)}
+\title{renmods: Download and query data from B.C. Environmental Monitoring Data System (EnMoDs)}
 \description{
-What the package does (one paragraph).
+Downloads and queries data from B.C. Environmental Monitoring Data System (EnMoDs).
 }
+\section{Package options}{
+
+
+The following options control package behavior:
+
+\describe{
+\item{\code{renmods.cache_dir}}{Directory for caching downloaded data.
+Default: \code{NULL} (uses \code{tools::R_user_dir("renmods", "cache")}).
+Set to a custom path to override default location.}
+\item{\code{renmods.urls}}{Named list of URLs for EnMoDS data sources.
+Contains: \code{this_yr}, \code{yr_2_5}, \code{yr_5_10}, and
+\code{historic}. URLs are provided by default but can be overridden.}
+}
+
+Set options using \code{options()}, for example:
+\preformatted{
+options(renmods.cache_dir = "~/.renmods_cache")
+}
+}
+
+\section{Datasets}{
+
+
+The package provides access to four EnMoDS datasets covering different time periods:
+
+\describe{
+\item{\code{this_yr}}{Current year data (updates weekly)}
+\item{\code{yr_2_5}}{Data from 2-5 years ago (updates every 26 weeks)}
+\item{\code{yr_5_10}}{Data from 5-10 years ago (updates every 26 weeks)}
+\item{\code{historic}}{Data older than 10 years (updates every 26 weeks)}
+}
+}
+
 \seealso{
 Useful links:
 \itemize{
