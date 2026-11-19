@@ -1,6 +1,6 @@
 # renmods variables
 
-ENMODS contains many variables and parameters. They have a reference
+EnMoDS contains many variables and parameters. They have a reference
 list for these variables online:
 <https://www2.gov.bc.ca/gov/content/environment/research-monitoring-reporting/monitoring/environmental-monitoring-data-system#resources>
 

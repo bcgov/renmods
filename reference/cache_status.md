@@ -1,7 +1,7 @@
 # View cache status
 
-Returns information about cached ENMODS data including when each data
-type was last downloaded, the date range it covers, and the file path.
+Returns information about cached EnMoDS data including when each dataset
+was last downloaded, the date range it covers, and the file path.
 
 ## Usage
 
@@ -13,7 +13,7 @@ cache_status()
 
 Data frame with columns:
 
-- `type`: Data type (this_yr, yr_2_5, yr_5_10, historic)
+- `dataset`: Dataset (this_yr, yr_2_5, yr_5_10, historic)
 
 - `last_downloaded`: Date/time of last download
 
@@ -29,4 +29,14 @@ Data frame with columns:
 # View status of all cached data
 cache_status()
 #> No cache
+
+# After download
+cache_status()
+#> # A tibble: 4 × 5
+#>   dataset  last_downloaded     date_range               renmods_version path    
+#>   <chr>    <chr>               <chr>                    <chr>           <chr>   
+#> 1 this_yr  2026-11-19 19:35:41 2025-01-01 to 2026-11-07 0.0.4           /tmp/Rt…
+#> 2 yr_2_5   2026-11-19 19:35:41 2022-01-01 to 2024-12-31 0.0.4           /tmp/Rt…
+#> 3 yr_5_10  2026-11-19 19:35:41 2017-01-01 to 2021-12-31 0.0.4           /tmp/Rt…
+#> 4 historic 2026-11-19 19:35:41 2016-12-31               0.0.4           /tmp/Rt…
 ```

@@ -13,14 +13,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/bcgov/renmods/blob/main/DESCRIPTION)
 
-LaZerte S (2026). *renmods: Downloads and queries data from B.C.
-Environmental Monitoring Data System (EnMoDs)*. R package version 0.0.3,
+LaZerte S (2026). *renmods: Download and query data from B.C.
+Environmental Monitoring Data System (EnMoDs)*. R package version 0.0.4,
 <https://github.com/bcgov/renmods>.
 
     @Manual{,
-      title = {renmods: Downloads and queries data from B.C. Environmental Monitoring Data System (EnMoDs)},
+      title = {renmods: Download and query data from B.C. Environmental Monitoring Data System (EnMoDs)},
       author = {Steffi LaZerte},
       year = {2026},
-      note = {R package version 0.0.3},
+      note = {R package version 0.0.4},
       url = {https://github.com/bcgov/renmods},
     }

@@ -1,25 +1,39 @@
-# Update cached ENMODS data
+# Update cached EnMoDS data
 
-Downloads ENMODS data from BC Gov and saves to the local cache. By
+Downloads EnMoDS data from BC Gov and saves to the local cache. By
 default, only missing or outdated data is downloaded.
 
 ## Usage
 
 ``` r
-renmods_update(types = "this_yr", force = FALSE)
+renmods_update(
+  datasets = "this_yr",
+  force = FALSE,
+  cleanup = TRUE,
+  types = NULL
+)
 ```
 
 ## Arguments
 
-- types:
+- datasets:
 
-  Character. Which data types to update. One or more of "this_yr",
+  Character. Which datasets to update. One or more of "this_yr",
   "yr_2_5", "yr_5_10", "historic", or "all" (default "this_yr").
 
 - force:
 
   Logical. If `TRUE`, downloads data even if cache is up-to-date
   (default `FALSE`).
+
+- cleanup:
+
+  Logical. Whether to remove the downloaded `csv.gz` file(s) after
+  conversion to parquet. Defaults to TRUE.
+
+- types:
+
+  Character. Deprecated, use `datasets` instead.
 
 ## Value
 
@@ -32,10 +46,10 @@ if (FALSE) { # \dontrun{
 # Update current year data
 renmods_update()
 
-# Update all data types
+# Update all datasets
 renmods_update("all")
 
-# Force update of specific types
+# Force update of specific datasets
 renmods_update(c("this_yr", "yr_2_5"), force = TRUE)
 } # }
 ```

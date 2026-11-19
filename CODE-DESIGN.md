@@ -3,26 +3,24 @@
 ## Be careful
 
 - Is the update frequency in `renmods()$update` appropriate?
-- `cache_meta()` uses
-  [`extract_date_range()`](https://bcgov.github.io/renmods/reference/extract_date_range.md)
-  to pull the original file name from the downloaded `*.csv.gz`.
-  Currently that is a date range for the file, which is how we get the
-  date ranges of different data sets. However, if the file names change
-  this might break.
+- `cache_meta()` uses `extract_date_range()` to pull the original file
+  name from the downloaded `*.csv.gz`. Currently that is a date range
+  for the file, which is how we get the date ranges of different data
+  sets. However, if the file names change this might break.
 - Note the custom `ask()` function which always returns `TRUE` if in a
   non-interactive session.
 - The `ask()` function also uses
   [`rlang::is_interactive()`](https://rlang.r-lib.org/reference/is_interactive.html)
   which works better with testthat (always assumes ‘FALSE’ in tests)
-- Current data types are: `this_yr`, `yr_2_5`, `yr_5_10`, `historic`
-  - If these change, modify `zzz.R` - `renmods.urls` option and types in
-    `renmods()$types`
+- Current datasets are: `this_yr`, `yr_2_5`, `yr_5_10`, `historic`
+  - If these change, modify `zzz.R` - `renmods.urls` option and datasets
+    in `renmods()$datasets`
 
 ## Future ideas
 
 - Is it possible to download in parallel with
   [furrr](https://furrr.futureverse.org/)
-- Are there likely to be data versions for ENMODS? Is tracking the last
+- Are there likely to be data versions for EnMoDS? Is tracking the last
   date of download and the date range of the files sufficient to track
   this?
 - Right now the actual
@@ -56,7 +54,7 @@
   older version of the package. This is to ensure that if the data
   changes, and the package changes to match, that users don’t get funny
   errors if they try to use older versions of the data with a newer
-  version of the package. If ENMODS has a data versioning system, we
+  version of the package. If EnMoDS has a data versioning system, we
   could use that instead.
 
 ## Workflow
@@ -81,15 +79,15 @@ cache.
 - Options include:
   - `renmods.cache_dir`: Where to store downloaded data (defaults to
     `NULL`)
-  - `renmods.urls`: URLs for four data types
+  - `renmods.urls`: URLs for four datasets
 - Options are only set if they aren’t already present
 
 ## Internal data via functions (`zzz.R`)
 
 - [`renmods()`](https://bcgov.github.io/renmods/reference/renmods-package.md)
   is an internal function (in `zzz.R`) that lists
-  - Data types available (‘this_yr’, ‘yr_2_5’, ‘yr_5_10’, ‘historic’)
-  - Update intervals (in weeks) for each type
+  - Datasets available (‘this_yr’, ‘yr_2_5’, ‘yr_5_10’, ‘historic’)
+  - Update intervals (in weeks) for each dataset
 - This could be a data set, but I don’t think it needs to be
 
 ## Cache (`cache.R`)
@@ -107,11 +105,9 @@ cache.
   - `cache_meta()` is very similar to
     [`cache_status()`](https://bcgov.github.io/renmods/reference/cache_status.md)
     but is also used to update/reset the cache metadata.
-  - `cache_meta()` uses
-    [`extract_date_range()`](https://bcgov.github.io/renmods/reference/extract_date_range.md)
-    to pull the original file name from the downloaded `*.csv.gz`.
-    Currently that is a date range for the file, but if the file names
-    change this might break.
+  - `cache_meta()` uses `extract_date_range()` to pull the original file
+    name from the downloaded `*.csv.gz`. Currently that is a date range
+    for the file, but if the file names change this might break.
 - Cache functions are meant to check for cache, create cache and prompt
   updates as needed. It is sometimes a bit convoluted and they are
   extremely chatty, so it might be worth adding silencing options in
@@ -131,8 +127,8 @@ cache.
 
 - [`renmods_connect()`](https://bcgov.github.io/renmods/reference/renmods_connect.md)
   combines and connects to all data by default
-- Users can supply a date range or the data type they wish to connect to
-- For a date range, we check the metadata and pick only the data types
+- Users can supply a date range or the dataset they wish to connect to
+- For a date range, we check the metadata and pick only the dataset
   needed, then we prefilter the data by date.
 - [`collect()`](https://bcgov.github.io/renmods/reference/collect.md) is
   exported from dplyr (`re-exports.R`) so that users don’t have to use
